@@ -24,20 +24,18 @@ async function fetchNews() {
     try {
         const res = await fetch(csvUrl);
         const text = await res.text();
+        
+        // 使用全新的超強 CSV 解析器，不再被 Alt+Enter 騙倒
         let rows = parseCSV(text).slice(1);
 
-        // 【防呆修復 1】嚴格過濾：只要「日期」或「標題」是空的，就當作是廢棄的空白列，直接剔除！
         rows = rows.filter(cols => cols.length >= 3 && cols[0].trim() !== "" && cols[2].trim() !== "");
-        
-        // 反轉陣列，讓最新填寫的真實活動排在最前面
         rows.reverse(); 
 
-        // 判斷首頁
         const path = window.location.pathname;
         const isHome = path.endsWith('index.html') || path.endsWith('/') || !path.includes('.html');
         
         if (isHome) {
-            rows = rows.slice(0, 6); // 首頁只抓前 6 筆真實資料
+            rows = rows.slice(0, 6);
         }
 
         const container = document.getElementById('news-container');
@@ -50,21 +48,19 @@ async function fetchNews() {
         }
 
         rows.forEach(cols => {
-            // 【防呆修復 2】安全賦值：如果有填就抓取，沒填就給空字串，徹底消滅 undefined！
             const date = cols[0] ? cols[0].trim() : "";
             const cat = cols[1] ? cols[1].trim() : "活動";
             const title = cols[2] ? cols[2].trim() : "未命名";
             const summary = cols[3] ? cols[3].trim() : "";
-            const content = cols[4] ? cols[4].trim() : "詳細內容即將公佈...";
+            const content = cols[4] ? cols[4].trim() : "";
             let img = cols[5] ? cols[5].trim() : "";
             const link = cols[6] ? cols[6].trim() : "";
 
-            // 【防呆修復 3】預設圖片：如果沒填圖片網址，自動套用一張高質感的醫療專業預設圖
             if (!img || !img.startsWith('http')) {
                 img = 'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=800&auto=format&fit=crop'; 
             }
 
-            // 安全編碼，避免標題或內容有單引號導致彈窗失效
+            // 將資料安全編碼
             const safeData = encodeURIComponent(JSON.stringify([date, cat, title, summary, content, img, link]));
 
             container.innerHTML += `
@@ -92,6 +88,7 @@ async function fetchNews() {
     }
 }
 
+// 修復彈窗：加入 max-height 限制圖片高度，並確保內容正確顯示
 window.openModal = function(encodedData) {
     const [date, cat, title, summary, content, img, link] = JSON.parse(decodeURIComponent(encodedData));
     const modalBody = document.getElementById('modal-body-content');
@@ -100,7 +97,7 @@ window.openModal = function(encodedData) {
     const actionBtn = hasLink ? `<div class="mt-4"><a href="${link}" target="_blank" class="btn btn-primary btn-lg w-100 fw-bold">立即前往報名 / 連結</a></div>` : "";
 
     modalBody.innerHTML = `
-        <img src="${img}" class="img-fluid rounded mb-4 w-100 shadow-sm" onerror="this.style.display='none'">
+        <img src="${img}" class="img-fluid rounded mb-4 w-100 shadow-sm" style="max-height: 300px; object-fit: cover;" onerror="this.style.display='none'">
         <h3 class="fw-bold" style="color: #003366;">${title}</h3>
         <p class="text-muted small">${date} | ${cat}</p>
         <hr>
@@ -110,18 +107,35 @@ window.openModal = function(encodedData) {
     new bootstrap.Modal(document.getElementById('activityModal')).show();
 };
 
+// 全新升級的 CSV 解析器：能正確處理儲存格內部的換行 (Alt+Enter)
 function parseCSV(text) {
-    const lines = text.split(/\r?\n/);
-    return lines.map(line => {
-        const result = [];
-        let cur = '', inQuote = false;
-        for (let i = 0; i < line.length; i++) {
-            let char = line[i];
-            if (char === '"') inQuote = !inQuote;
-            else if (char === ',' && !inQuote) { result.push(cur); cur = ''; }
-            else cur += char;
+    let result = [];
+    let row = [];
+    let cur = '';
+    let inQuote = false;
+    for (let i = 0; i < text.length; i++) {
+        let char = text[i];
+        if (char === '"') {
+            if (inQuote && text[i+1] === '"') {
+                cur += '"'; // 處理雙引號跳脫
+                i++;
+            } else {
+                inQuote = !inQuote;
+            }
+        } else if (char === ',' && !inQuote) {
+            row.push(cur);
+            cur = '';
+        } else if ((char === '\n' || char === '\r') && !inQuote) {
+            if (char === '\r' && text[i+1] === '\n') i++; 
+            row.push(cur);
+            result.push(row);
+            row = [];
+            cur = '';
+        } else {
+            cur += char;
         }
-        result.push(cur);
-        return result;
-    });
+    }
+    row.push(cur);
+    if (row.length > 0) result.push(row);
+    return result;
 }
