@@ -21,18 +21,55 @@
 
     <section class="py-5">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-end mb-5 border-start border-warning border-5 ps-3">
-                <div>
-                    <h2 class="fw-bold mb-0">計畫所有活動回顧</h2>
-                    <p class="text-muted mb-0 mt-1">同步自 Google 試算表，按時間由新到舊排序</p>
-                </div>
-            </div>
-            
+            <h2 class="fw-bold mb-4 border-start border-warning border-5 ps-3">最新開放活動</h2>
             <div id="news-container" class="row g-4">
                 <div class="text-center py-5">
                     <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-2 text-muted">正在同步最新資料...</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h3 class="fw-bold mb-4 border-start border-primary border-5 ps-3">115 年度計畫預定時程</h3>
+            <div class="table-responsive bg-white shadow-sm rounded p-4">
+                <table class="table table-hover align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col" width="15%">預計時間</th>
+                            <th scope="col" width="15%">類別</th>
+                            <th scope="col" width="40%">活動主題與內容</th>
+                            <th scope="col" width="30%">主講/主持/參與單位</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>3月24日</td>
+                            <td><span class="badge bg-info text-dark">專家共識會</span></td>
+                            <td class="fw-bold">高齡與社會韌性共識會</td>
+                            <td class="small text-muted">張育通老師、奇岩複合式機構、消防局等</td>
+                        </tr>
+                        <tr>
+                            <td>4月21日</td>
+                            <td><span class="badge bg-info text-dark">專家共識會</span></td>
+                            <td class="fw-bold">語聽障礙者韌性共識會</td>
+                            <td class="small text-muted">張育通老師、陳郁雯老師、復健部</td>
+                        </tr>
+                        <tr>
+                            <td>7月 - 8月</td>
+                            <td><span class="badge bg-success">實作專班</span></td>
+                            <td class="fw-bold">聽障者韌性專班 (CPR+STB)</td>
+                            <td class="small text-muted">啟聰學校、緊急救護社</td>
+                        </tr>
+                        <tr>
+                            <td>11月6日</td>
+                            <td><span class="badge bg-warning text-dark">實體演練</span></td>
+                            <td class="fw-bold">校園避難與收容計畫演練</td>
+                            <td class="small text-muted">健康中心、長照系、專業醫療顧問群</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
@@ -45,8 +82,7 @@
                 <div class="modal-header border-0 pb-0">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div id="modal-body-content" class="modal-body pt-0">
-                    </div>
+                <div id="modal-body-content" class="modal-body pt-0"></div>
             </div>
         </div>
     </div>
