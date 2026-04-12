@@ -34,6 +34,16 @@ body {
     text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
 }
 
+/* 導覽列 LOGO 樣式 */
+.navbar-brand img {
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    padding: 2px;
+}
+
+.navbar-brand span {
+    letter-spacing: 0.5px;
+}
+
 /* 調整按鈕在 Hero 區的樣式 */
 .hero-section .btn-light {
     background-color: #ffffff;
