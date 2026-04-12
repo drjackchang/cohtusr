@@ -1,93 +1,110 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // 1. 載入元件
+    // 1. 同時載入導覽列與頁尾
     loadComponent('navbar-placeholder', 'navbar.html');
     loadComponent('footer-placeholder', 'footer.html');
 
-    // 2. 執行資料抓取
+    // 2. 執行 Google 試算表資料抓取
     fetchNews();
 });
 
+// 負責抓取 HTML 零件的函式
 function loadComponent(id, file) {
-    fetch(file).then(res => res.text()).then(data => {
-        document.getElementById(id).innerHTML = data;
-    });
+    fetch(file)
+        .then(res => {
+            if (!res.ok) throw new Error('找不到檔案: ' + file);
+            return res.text();
+        })
+        .then(data => {
+            document.getElementById(id).innerHTML = data;
+            // 載入後，如果是導覽列，執行高亮與語言切換邏輯
+            if (id === 'navbar-placeholder') {
+                initNavbarLogic();
+            }
+        })
+        .catch(err => console.error(err));
 }
 
+// 導覽列邏輯：處理 EN/中文切換與 Active 樣式
+function initNavbarLogic() {
+    const currentPath = window.location.pathname;
+    const isEnglish = currentPath.includes('/en/');
+    const langBtn = document.getElementById('lang-switch');
+    
+    if (langBtn) {
+        langBtn.innerText = isEnglish ? "中文" : "EN";
+        const fileName = currentPath.split('/').pop() || "index.html";
+        langBtn.href = isEnglish ? "../" + fileName : "en/" + fileName;
+    }
+
+    const fileName = currentPath.split('/').pop() || "index.html";
+    const navId = "nav-" + fileName.replace(".html", "");
+    const activeLink = document.getElementById(navId);
+    if (activeLink) activeLink.classList.add("active");
+}
+
+// 負責抓取 Google 試算表並生成卡片的函式
 async function fetchNews() {
-    // 您提供的 Google Sheets CSV 連結
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZK3wm2tlM3T1Qy2dCf6Gb96_8MJfdmnX9wCIYUSQ5K5hC44bGnl3hZXZeiH4v5f4QBksGZXoNTolE/pub?output=csv'; 
     
     try {
         const res = await fetch(csvUrl);
         const text = await res.text();
-        
-        // 使用簡易 CSV 解析邏輯（處理包含逗號的引號內容）
-        const rows = parseCSV(text).slice(1); 
+        const rows = parseCSV(text).slice(1); // 略過標題列
         const container = document.getElementById('news-container');
         if (!container) return;
         
-        container.innerHTML = '';
+        container.innerHTML = ''; // 清除載入動畫
 
         rows.forEach(cols => {
-            // 預期欄位: 0:日期, 1:類別, 2:標題, 3:摘要, 4:詳情內容, 5:圖片連結, 6:報名連結
             if (cols.length < 3) return;
             const [date, cat, title, summary, content, img, link] = cols.map(c => c?.trim() || "");
 
-            const cardHtml = `
+            container.innerHTML += `
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 border-0 shadow-sm overflow-hidden">
-                        <div class="position-relative">
-                            <img src="${img || 'https://via.placeholder.com/400x250?text=No+Image'}" class="card-img-top" style="height:200px; object-fit:cover;">
-                            <span class="position-absolute top-0 start-0 m-3 badge bg-primary">${cat}</span>
-                        </div>
+                        <img src="${img || 'https://via.placeholder.com/400x250'}" class="card-img-top" style="height:200px; object-fit:cover;">
                         <div class="card-body">
-                            <small class="text-muted d-block mb-2"><i class="far fa-calendar-alt me-1"></i> ${date}</small>
+                            <span class="badge bg-primary mb-2">${cat}</span>
+                            <small class="text-muted d-block mb-2">${date}</small>
                             <h5 class="card-title fw-bold">${title}</h5>
                             <p class="card-text text-secondary small">${summary}</p>
                             <button class="btn btn-link p-0 fw-bold text-decoration-none" 
-                                    onclick="openActivityModal('${encodeURIComponent(JSON.stringify(cols))}')">
+                                    onclick="openModal('${encodeURIComponent(JSON.stringify(cols))}')">
                                 閱讀全文 →
                             </button>
                         </div>
                     </div>
                 </div>
             `;
-            container.innerHTML += cardHtml;
         });
     } catch (e) {
-        console.error("資料同步失敗：", e);
-        document.getElementById('news-container').innerHTML = '<p class="text-center text-muted">目前尚無最新動態</p>';
+        console.error("資料同步失敗", e);
     }
 }
 
-// 彈窗邏輯
-window.openActivityModal = function(encodedData) {
-    const cols = JSON.parse(decodeURIComponent(encodedData));
-    const [date, cat, title, summary, content, img, link] = cols.map(c => c?.trim() || "");
+// 彈窗顯示邏輯
+window.openModal = function(encodedData) {
+    const [date, cat, title, summary, content, img, link] = JSON.parse(decodeURIComponent(encodedData));
     const modalBody = document.getElementById('modal-body-content');
 
-    // 判斷連結是否有效
-    const isValidLink = link && link.toLowerCase().startsWith('http');
-    const actionButton = isValidLink 
+    // 關鍵要求：只有當連結欄位開頭是 http 時，才顯示按鈕
+    const hasLink = link && link.toLowerCase().startsWith('http');
+    const actionBtn = hasLink 
         ? `<div class="mt-4"><a href="${link}" target="_blank" class="btn btn-primary btn-lg w-100 fw-bold">立即前往報名 / 連結</a></div>` 
         : "";
 
     modalBody.innerHTML = `
-        <img src="${img || 'https://via.placeholder.com/800x450?text=No+Image'}" class="img-fluid rounded mb-4 w-100 shadow-sm">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <span class="badge bg-primary-light text-primary">${cat}</span>
-            <small class="text-muted">${date}</small>
-        </div>
-        <h3 class="fw-bold mb-3">${title}</h3>
-        <div class="content-area text-secondary" style="white-space: pre-wrap; line-height: 1.8;">${content}</div>
-        ${actionButton}
+        <img src="${img}" class="img-fluid rounded mb-4 w-100">
+        <h3 class="fw-bold">${title}</h3>
+        <p class="text-muted small">${date} | ${cat}</p>
+        <div class="text-secondary" style="white-space: pre-wrap; line-height: 1.8;">${content}</div>
+        ${actionBtn}
     `;
 
-    const modal = new bootstrap.Modal(document.getElementById('activityModal'));
-    modal.show();
+    new bootstrap.Modal(document.getElementById('activityModal')).show();
 };
 
-// 輔助函式：解析 CSV (處理內容中的逗號)
+// 輔助解析 CSV
 function parseCSV(text) {
     const lines = text.split(/\r?\n/);
     return lines.map(line => {
