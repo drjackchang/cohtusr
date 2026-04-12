@@ -49,11 +49,23 @@ async function fetchNews() {
     try {
         const res = await fetch(csvUrl);
         const text = await res.text();
-        const rows = parseCSV(text).slice(1); // 略過標題列
+        
+        // 1. 解析 CSV 並移除標題列
+        let rows = parseCSV(text).slice(1); 
+        
+        // 2. 核心修正：將陣列順序反轉 (最新的排到最前面)
+        rows.reverse(); 
+
+        // 3. 判斷是否為首頁，如果是首頁則只取前 6 筆
+        const isHomePage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/';
+        if (isHomePage) {
+            rows = rows.slice(0, 6); 
+        }
+
         const container = document.getElementById('news-container');
         if (!container) return;
         
-        container.innerHTML = ''; // 清除載入動畫
+        container.innerHTML = ''; 
 
         rows.forEach(cols => {
             if (cols.length < 3) return;
@@ -62,10 +74,12 @@ async function fetchNews() {
             container.innerHTML += `
                 <div class="col-md-4 mb-4">
                     <div class="card h-100 border-0 shadow-sm overflow-hidden">
-                        <img src="${img || 'https://via.placeholder.com/400x250'}" class="card-img-top" style="height:200px; object-fit:cover;">
+                        <div class="position-relative">
+                            <img src="${img || 'https://via.placeholder.com/400x250'}" class="card-img-top" style="height:200px; object-fit:cover;">
+                            <span class="position-absolute top-0 start-0 m-3 badge bg-primary">${cat}</span>
+                        </div>
                         <div class="card-body">
-                            <span class="badge bg-primary mb-2">${cat}</span>
-                            <small class="text-muted d-block mb-2">${date}</small>
+                            <small class="text-muted d-block mb-2"><i class="far fa-calendar-alt me-1"></i> ${date}</small>
                             <h5 class="card-title fw-bold">${title}</h5>
                             <p class="card-text text-secondary small">${summary}</p>
                             <button class="btn btn-link p-0 fw-bold text-decoration-none" 
