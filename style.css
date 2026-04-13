@@ -80,3 +80,20 @@ body {
         padding-top: 65px;
     }
 }
+
+/* 強制將頁尾推至螢幕最底端 (Sticky Footer) */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* 讓網頁的最小高度等於螢幕高度 */
+}
+
+#footer-placeholder {
+    margin-top: auto; /* 自動利用上方剩餘空間，把 Footer 往下推 */
+    width: 100%;
+}
+
+/* 如果您有使用 AIT 橫幅的裝飾圓圈，防止它撐開網頁產生多餘捲軸 */
+body, html {
+    overflow-x: hidden;
+}
