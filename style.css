@@ -13,14 +13,30 @@ body {
 
 /* 修正後的 Hero Section */
 .hero-section {
-    /* 將高度固定在一個比較小的值，例如 400px 或 50vh (螢幕一半高) */
-    min-height: 50vh; 
-    /* 縮小上下留白 */
-    padding: 5rem 0; 
-    
-    background-image: url('https://www.ntunhs.edu.tw/var/file/0/1000/randimg/mobileadv_1105_8752682_67162.jpg');
+    /* 1. 控制高度：改為視窗高度的 60% (原先可能是 100%) */
+    min-height: 60vh; 
+    padding: 60px 0;
+
+    /* 2. 半透明遮罩 (核心修正) */
+    /* 這裡使用兩層背景：第一層是 50% 透明度的黑色遮罩，第二層才是您的圖片 */
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('https://cohtusr.ntunhs.edu.tw/share-banner.jpg'); /* 請確認圖片路徑 */
+
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
+    
+    /* 讓內容置中 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 3. 增強文字陰影，讓字體更立體 */
+.hero-section h1, 
+.hero-section h4 {
+    text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.8);
+    font-weight: 700;
 }
 
 /* 確保文字陰影，增加可讀性 */
