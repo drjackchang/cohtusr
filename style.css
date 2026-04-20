@@ -13,20 +13,14 @@ body {
 
 /* 修正後的 Hero Section */
 .hero-section {
-    /* 增加一個 fallback 背景顏色 (深藍色)，確保圖片失效時文字仍是白的 */
-    background-color: #003366; 
+    /* 將高度固定在一個比較小的值，例如 400px 或 50vh (螢幕一半高) */
+    min-height: 50vh; 
+    /* 縮小上下留白 */
+    padding: 5rem 0; 
     
-    /* 更新一個更穩定的背景圖網址，並加上深色遮罩 */
-    background-image: linear-gradient(rgba(0, 51, 102, 0.7), rgba(0, 0, 0, 0.7)), 
-                      url('https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=2070&auto=format&fit=crop');
-    
+    background-image: url('目前的圖片.jpg');
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
-    min-height: 65vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 /* 確保文字陰影，增加可讀性 */
