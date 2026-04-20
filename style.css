@@ -20,7 +20,7 @@ body {
     /* 2. 半透明遮罩 (核心修正) */
     /* 這裡使用兩層背景：第一層是 50% 透明度的黑色遮罩，第二層才是您的圖片 */
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                url('https://cohtusr.ntunhs.edu.tw/share-banner.jpg'); /* 請確認圖片路徑 */
+                url('https://www.ntunhs.edu.tw/var/file/0/1000/randimg/mobileadv_1105_8752682_67162.jpg'); /* 請確認圖片路徑 */
 
     background-size: cover;
     background-position: center;
