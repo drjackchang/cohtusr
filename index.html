@@ -246,12 +246,21 @@ async function fetchAdvocacyData() {
 function openAdvocacyModal(title, category, content) {
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-badge-container').innerHTML = `<span class="badge bg-primary rounded-pill px-3">${category}</span>`;
-    document.getElementById('modal-content').innerHTML = content.replace(/\n/g, '<br>');
+    
+    // 【升級版排版引擎】自動把特殊符號變成漂亮的 CSS 樣式
+    let richText = content
+        // 1. 把【小標題】變成帶有底線的亮色標題
+        .replace(/【(.*?)】/g, '<h5 class="fw-bold mt-4 mb-2" style="color: #0052d4; border-bottom: 2px solid #e9ecef; padding-bottom: 8px;"><i class="fas fa-caret-right me-2"></i>$1</h5>')
+        // 2. 把 **粗體** 變成帶有黃色螢光筆效果的重點字
+        .replace(/\*\*(.*?)\*\*/g, '<strong style="background-color: #fff3cd; padding: 2px 6px; border-radius: 4px; color: #856404; font-weight: bold;">$1</strong>')
+        // 3. 把一般換行變成網頁換行
+        .replace(/\n/g, '<br>');
+
+    document.getElementById('modal-content').innerHTML = richText;
     
     const myModal = new bootstrap.Modal(document.getElementById('advocacyModal'));
     myModal.show();
 }
-
 // 網頁載入時執行
 document.addEventListener('DOMContentLoaded', fetchAdvocacyData);
 </script></body>
