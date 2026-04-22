@@ -187,7 +187,7 @@ async function fetchAdvocacyData() {
         
         // 對準您 index.html 裡的容器 (請確保區塊 ID 為 advocacy-container)
         const container = document.getElementById('advocacy-container');
-        if (!container) return;
+        if (index === 0) return;
         container.innerHTML = ''; 
 
         rows.forEach((row, index) => {
