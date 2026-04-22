@@ -187,10 +187,17 @@ async function fetchAdvocacyData() {
         
         // 對準您 index.html 裡的容器 (請確保區塊 ID 為 advocacy-container)
         const container = document.getElementById('advocacy-container');
-        if (index === 0) return;
+        if (!container) return; 
+        
+        // 【修正1】清空轉圈圈圖示 (要在迴圈外面做)
         container.innerHTML = ''; 
 
+        // 開始處理每一列資料
         rows.forEach((row, index) => {
+            
+            // 【修正2】攔截器要在迴圈「裡面」！(略過第一列標題)
+            if (index === 0) return;
+
             const title = row.c[0]?.v || '';
             const category = row.c[1]?.v || '議題倡議';
             const summary = row.c[2]?.v || '';
@@ -203,11 +210,12 @@ async function fetchAdvocacyData() {
                 'linear-gradient(135deg, #ff9966, #ff5e62)',
                 'linear-gradient(135deg, #8E2DE2, #4A00E0)'
             ];
-            const bg = gradients[index % gradients.length];
+            // 因為略過了 index 0，所以用 (index - 1) 來算顏色，確保顏色循序漸進
+            const bg = gradients[(index - 1) % gradients.length];
 
             const cardHtml = `
                 <div class="col-md-6">
-                    <div class="card h-100 border-0 shadow-sm" style="border-radius: 15px; overflow: hidden; cursor: pointer;" onclick="openAdvocacyModal('${title}', '${category}', \`${fullContent.replace(/"/g, '&quot;')}\`)">
+                    <div class="card h-100 border-0 shadow-sm" style="border-radius: 15px; overflow: hidden; cursor: pointer;" onclick="openAdvocacyModal('${title.replace(/'/g, "\\'")}', '${category}', \`${fullContent.replace(/"/g, '&quot;')}\`)">
                         <div class="row g-0 h-100">
                             <div class="col-sm-4 d-flex align-items-center justify-content-center text-white p-4" style="background: ${bg};">
                                 <i class="fas ${icon} fa-3x"></i>
@@ -228,6 +236,10 @@ async function fetchAdvocacyData() {
         });
     } catch (error) {
         console.error('同步智庫失敗:', error);
+        const container = document.getElementById('advocacy-container');
+        if (container) {
+            container.innerHTML = '<p class="text-center text-danger">讀取資料失敗，請確認網路連線或試算表狀態。</p>';
+        }
     }
 }
 
@@ -242,6 +254,5 @@ function openAdvocacyModal(title, category, content) {
 
 // 網頁載入時執行
 document.addEventListener('DOMContentLoaded', fetchAdvocacyData);
-</script>
-</body>
+</script></body>
 </html>
