@@ -126,31 +126,25 @@ async function fetch115Results() {
 
         container.innerHTML = ''; 
         
-        let lastDate = ''; // 記憶上一個日期，解決合併儲存格或同一天活動的問題
+        let lastDate = ''; 
 
         rows.forEach((row, index) => {
-            if (index === 0) return; // 跳過標題列
-
-            // 【規則1：以標題為主來判斷】如果沒有標題，就當作是無效資料跳過
             const title = row.c[1]?.v || '';
-            if (!title.trim()) return;
+            
+            // 【修復核心】：不再盲目跳過第一行，而是判斷它是不是真正的「標題列」或「空白列」
+            if (!title.trim() || title === '活動標題' || title === '標題') return;
 
-            // 【規則2：優先抓取格式化後的文字】
-            // row.c[0]?.f 會抓到您在試算表上「肉眼看到」的樣子 (如 115/4/28)
             let rawDate = row.c[0]?.f || row.c[0]?.v || '';
 
-            // 萬一還是抓到 Date(2026,3,28) 這種機器代碼，自動幫它轉回人類語言
             if (typeof rawDate === 'string' && rawDate.startsWith('Date(')) {
                 const match = rawDate.match(/Date\((\d+),(\d+),(\d+)\)/);
                 if (match) {
-                    // Google 系統月份少 1，所以要 +1 轉回來
                     rawDate = `${match[1]}/${parseInt(match[2]) + 1}/${match[3]}`;
                 }
             }
 
-            // 【規則3：日期沿用機制】如果這列沒日期，就沿用上一筆的日期
             const date = rawDate || lastDate;
-            lastDate = date; // 存起來給下一列備用
+            lastDate = date; 
 
             const summary = row.c[2]?.v || '';
             const content = row.c[3]?.v || '';
@@ -164,7 +158,7 @@ async function fetch115Results() {
                     <div class="card h-100 shadow-sm border-0" style="cursor:pointer; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openDetailModal('${title.replace(/'/g, "\\'")}', '${date}', \`${content.replace(/"/g, '&quot;')}\`, '${images.replace(/'/g, "\\'")}')">
                         ${imgTag}
                         <div class="card-body text-start">
-                            <small class="text-primary fw-bold">${date}</small>
+                            <small class="text-primary fw-bold">${date.replace(/-/g, '/')}</small>
                             <h5 class="card-title fw-bold mt-2">${title}</h5>
                             <p class="card-text text-muted small mt-2">${summary}</p>
                         </div>
@@ -174,10 +168,9 @@ async function fetch115Results() {
         });
     } catch (error) {
         console.error('抓取成果資料失敗:', error);
-        container.innerHTML = '<div class="alert alert-warning w-100 text-center">目前尚無資料或資料同步失敗，請確認試算表權限。</div>';
+        container.innerHTML = '<div class="alert alert-warning w-100 text-center">目前尚無資料或資料同步失敗，請確認試算表狀態。</div>';
     }
 }
-
 function openDetailModal(title, date, content, imgStr) {
     document.getElementById('modal-title').innerText = title;
     document.getElementById('modal-badge-container').innerHTML = `<span class="badge bg-primary rounded-pill px-3">${date}</span>`;
