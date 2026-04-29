@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>114 年度成果 | Resilience Together</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+    <div id="navbar-placeholder"></div>
+
+    <section class="py-5 bg-secondary text-white text-center" style="background: linear-gradient(45deg, #4a5568, #2d3748);">
+        <div class="container py-4">
+            <span class="badge bg-warning text-dark mb-2">115 年度 (2026) </span>
+            <h1 class="fw-bold display-5">115 年度執行成果</h1>
+            <p class="lead">紮根校園多元培力，共築韌性守護社區</p>
+        </div>
+    </section>
+
+    <section class="py-5" style="margin-top: -40px;">
+        <div class="container">
+            <div class="row g-4 text-center">
+                <div class="col-md-3 col-6">
+                    <div class="p-4 bg-white rounded shadow border-bottom border-primary border-4 h-100">
+                        <h2 class="fw-bold text-primary display-6 mb-2">4+<span class="fs-5 text-muted">場</span></h2>
+                        <p class="text-secondary fw-bold mb-0">專業實作與講座活動(持續增加中)</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-4 bg-white rounded shadow border-bottom border-primary border-4 h-100">
+                        <h2 class="fw-bold text-primary display-6 mb-2">35+<span class="fs-5 text-muted">人次</span></h2>
+                        <p class="text-secondary fw-bold mb-0">全年度總參與人數(持續增加中)</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-4 bg-white rounded shadow border-bottom border-success border-4 h-100">
+                        <h2 class="fw-bold text-success display-6 mb-2">35+<span class="fs-5 text-muted">張</span></h2>
+                        <p class="text-secondary fw-bold mb-0">核發參加與完訓證書</p>
+                        <small class="text-muted d-block mt-1">(含 14+張美國 STB 證書)</small>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="p-4 bg-white rounded shadow border-bottom border-danger border-4 h-100">
+                        <h2 class="fw-bold text-danger display-6 mb-2">98 <span class="fs-5 text-muted">%</span></h2>
+                        <p class="text-secondary fw-bold mb-0">整體活動滿意度</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h3 class="fw-bold">全方位韌性培力計畫</h3>
+                <p class="text-muted">從基礎急救到災難醫療，建構堅實的校園防護網</p>
+            </div>
+
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h3 class="fw-bold">活動現場精選</h3>
+            <p class="text-muted">透過實作演練與專業講座，紮根韌性種子</p>
+        </div>
+
+	 // 這次改抓 115年度成果 頁籤
+const resultsTabName = encodeURIComponent('115年度成果');
+const resultsUrl = `https://docs.google.com/spreadsheets/d/${advocacySheetId}/gviz/tq?tqx=out:json&sheet=${resultsTabName}`;
+
+async function fetchResults115() {
+    const container = document.getElementById('results-115-container');
+    const response = await fetch(resultsUrl);
+    const text = await response.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
+
+    container.innerHTML = ''; // 清除讀取中
+
+    rows.forEach((row, index) => {
+        if (index === 0) return; // 跳過標題列
+        
+        const date = row.c[0]?.v || '';
+        const title = row.c[1]?.v || '';
+        const summary = row.c[2]?.v || '';
+        const link = row.c[4]?.v || '#';
+
+        const cardHtml = `
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body">
+                        <div class="text-primary fw-bold mb-2">${date}</div>
+                        <h5 class="card-title fw-bold">${title}</h5>
+                        <p class="card-text text-muted">${summary}</p>
+                        <a href="${link}" class="btn btn-outline-primary btn-sm">查看完整紀錄</a>
+                    </div>
+                </div>
+            </div>`;
+        container.innerHTML += cardHtml;
+    });
+}
+document.addEventListener('DOMContentLoaded', fetchResults115);       
+          
+    </section>
+
+    <section class="py-5 bg-dark text-white">
+        <div class="container text-center">
+            <h3 class="fw-bold mb-4">深入了解 115 年度成果</h3>
+            <p class="text-white-50 mb-4">下載完整結案簡報，檢視所有活動照片與滿意度分析數據。</p>
+            <a href="#" target="_blank" class="btn btn-warning btn-lg fw-bold px-5">
+                <i class="fas fa-file-pdf me-2"></i> 下載 115 年度成果報告書 (PDF) 計畫執行中尚未開放下載
+            </a>
+        </div>
+    </section>
+
+    <div id="footer-placeholder" class="mt-auto w-100"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="components.js"></script>
+</body>
+</html>
