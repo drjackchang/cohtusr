@@ -109,10 +109,12 @@
         </div>
     </div>
 
-    <script>
+<script>
 const sheetId = '1vwbGZnHwlGwGxgitaRV9E7U508xVB3kOkDZMhyg0iFI';
 const tabName = encodeURIComponent('115年度成果');
-const resultsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${tabName}`;
+
+// 【關鍵修正 1】加入破除快取的魔法參數 (new Date().getTime())，強迫每次抓取最新試算表資料！
+const resultsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${tabName}&_=${new Date().getTime()}`;
 
 async function fetch115Results() {
     const container = document.getElementById('results-container');
@@ -131,8 +133,8 @@ async function fetch115Results() {
         rows.forEach((row, index) => {
             const title = row.c[1]?.v || '';
             
-            // 【修復核心】：不再盲目跳過第一行，而是判斷它是不是真正的「標題列」或「空白列」
-            if (!title.trim() || title === '活動標題' || title === '標題') return;
+            // 【關鍵修正 2】智慧判斷：跳過空白列、標題列。不用管它在第幾列，只要是真正的活動就會抓！
+            if (!title || title.trim() === '' || title.includes('活動標題') || title === '標題') return;
 
             let rawDate = row.c[0]?.f || row.c[0]?.v || '';
 
@@ -171,9 +173,10 @@ async function fetch115Results() {
         container.innerHTML = '<div class="alert alert-warning w-100 text-center">目前尚無資料或資料同步失敗，請確認試算表狀態。</div>';
     }
 }
+
 function openDetailModal(title, date, content, imgStr) {
     document.getElementById('modal-title').innerText = title;
-    document.getElementById('modal-badge-container').innerHTML = `<span class="badge bg-primary rounded-pill px-3">${date}</span>`;
+    document.getElementById('modal-badge-container').innerHTML = `<span class="badge bg-primary rounded-pill px-3">${date.replace(/-/g, '/')}</span>`;
     
     // 排版引擎
     let richText = content
