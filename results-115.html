@@ -110,114 +110,128 @@
     </div>
 
     <script>
-    const sheetId = '1vwbGZnHwlGwGxgitaRV9E7U508xVB3kOkDZMhyg0iFI';
-    const tabName = encodeURIComponent('115年度成果');
-    const resultsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${tabName}`;
+const sheetId = '1vwbGZnHwlGwGxgitaRV9E7U508xVB3kOkDZMhyg0iFI';
+const tabName = encodeURIComponent('115年度成果');
+const resultsUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&sheet=${tabName}`;
 
-    async function fetch115Results() {
-        const container = document.getElementById('results-container');
-        if (!container) return;
+async function fetch115Results() {
+    const container = document.getElementById('results-container');
+    if (!container) return;
+    
+    try {
+        const response = await fetch(resultsUrl);
+        const text = await response.text();
+        const json = JSON.parse(text.substr(47).slice(0, -2));
+        const rows = json.table.rows;
+
+        container.innerHTML = ''; 
         
-        try {
-            const response = await fetch(resultsUrl);
-            const text = await response.text();
+        let lastDate = ''; // 記憶上一個日期，解決合併儲存格或同一天活動的問題
+
+        rows.forEach((row, index) => {
+            if (index === 0) return; // 跳過標題列
+
+            // 【規則1：以標題為主來判斷】如果沒有標題，就當作是無效資料跳過
+            const title = row.c[1]?.v || '';
+            if (!title.trim()) return;
+
+            // 【規則2：優先抓取格式化後的文字】
+            // row.c[0]?.f 會抓到您在試算表上「肉眼看到」的樣子 (如 115/4/28)
+            let rawDate = row.c[0]?.f || row.c[0]?.v || '';
+
+            // 萬一還是抓到 Date(2026,3,28) 這種機器代碼，自動幫它轉回人類語言
+            if (typeof rawDate === 'string' && rawDate.startsWith('Date(')) {
+                const match = rawDate.match(/Date\((\d+),(\d+),(\d+)\)/);
+                if (match) {
+                    // Google 系統月份少 1，所以要 +1 轉回來
+                    rawDate = `${match[1]}/${parseInt(match[2]) + 1}/${match[3]}`;
+                }
+            }
+
+            // 【規則3：日期沿用機制】如果這列沒日期，就沿用上一筆的日期
+            const date = rawDate || lastDate;
+            lastDate = date; // 存起來給下一列備用
+
+            const summary = row.c[2]?.v || '';
+            const content = row.c[3]?.v || '';
+            const images = row.c[4]?.v || ''; 
             
-            // 檢查是否成功抓取資料
-            const startIdx = text.indexOf('{');
-            const endIdx = text.lastIndexOf('}');
-            if (startIdx === -1 || endIdx === -1) throw new Error("資料格式錯誤或權限不足");
+            const firstImg = images ? images.split(',')[0].trim() : ''; 
+            const imgTag = firstImg ? `<img src="${firstImg}" class="card-img-top" style="height:200px; object-fit:cover;" alt="封面圖">` : `<div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:200px;"><i class="fas fa-image fa-3x text-muted opacity-25"></i></div>`;
 
-            const json = JSON.parse(text.substring(startIdx, endIdx + 1));
-            const rows = json.table.rows;
-
-            container.innerHTML = ''; // 清除轉圈圈
-
-            rows.forEach((row, index) => {
-                if (index === 0) return; // 跳過標題列
-
-                const date = row.c[0]?.v || '';
-                const title = row.c[1]?.v || '';
-                const summary = row.c[2]?.v || '';
-                const content = row.c[3]?.v || '';
-                const images = row.c[4]?.v || ''; 
-                
-                // 抓第一張圖當封面，如果沒圖給預設背景色
-                const firstImg = images ? images.split(',')[0].trim() : ''; 
-                const imgTag = firstImg ? `<img src="${firstImg}" class="card-img-top" style="height:200px; object-fit:cover;" alt="封面圖">` : `<div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:200px;"><i class="fas fa-image fa-3x text-muted opacity-25"></i></div>`;
-
-                const cardHtml = `
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100 shadow-sm border-0" style="cursor:pointer; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openDetailModal('${title.replace(/'/g, "\\'")}', '${date}', \`${content.replace(/"/g, '&quot;')}\`, '${images.replace(/'/g, "\\'")}')">
-                            ${imgTag}
-                            <div class="card-body text-start">
-                                <small class="text-primary fw-bold">${date}</small>
-                                <h5 class="card-title fw-bold mt-2">${title}</h5>
-                                <p class="card-text text-muted small mt-2">${summary}</p>
-                            </div>
+            const cardHtml = `
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm border-0" style="cursor:pointer; transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'" onclick="openDetailModal('${title.replace(/'/g, "\\'")}', '${date}', \`${content.replace(/"/g, '&quot;')}\`, '${images.replace(/'/g, "\\'")}')">
+                        ${imgTag}
+                        <div class="card-body text-start">
+                            <small class="text-primary fw-bold">${date}</small>
+                            <h5 class="card-title fw-bold mt-2">${title}</h5>
+                            <p class="card-text text-muted small mt-2">${summary}</p>
                         </div>
-                    </div>`;
-                container.innerHTML += cardHtml;
-            });
-        } catch (error) {
-            console.error('抓取成果資料失敗:', error);
-            container.innerHTML = '<div class="alert alert-warning w-100 text-center">目前尚無資料或資料同步失敗，請確認試算表權限。</div>';
-        }
-    }
-
-    function openDetailModal(title, date, content, imgStr) {
-        document.getElementById('modal-title').innerText = title;
-        document.getElementById('modal-badge-container').innerHTML = `<span class="badge bg-primary rounded-pill px-3">${date}</span>`;
-        
-        // 加上您之前喜歡的排版引擎 (自動替換【】跟**)
-        let richText = content
-            .replace(/【(.*?)】/g, '<h5 class="fw-bold mt-4 mb-2" style="color: #0052d4; border-bottom: 2px solid #e9ecef; padding-bottom: 8px;"><i class="fas fa-caret-right me-2"></i>$1</h5>')
-            .replace(/\*\*(.*?)\*\*/g, '<strong style="background-color: #fff3cd; padding: 2px 6px; border-radius: 4px; color: #856404; font-weight: bold;">$1</strong>')
-            .replace(/\n/g, '<br>');
-        document.getElementById('modal-content').innerHTML = richText;
-        
-        // 生成輪播圖 HTML
-        const imgs = imgStr.split(',').map(s => s.trim()).filter(url => url);
-        let carouselHtml = '';
-        
-        if (imgs.length > 0) {
-            let indicators = '';
-            let innerImages = '';
-            
-            imgs.forEach((url, i) => {
-                const isActive = i === 0 ? 'active' : '';
-                indicators += `<button type="button" data-bs-target="#carouselExample" data-bs-slide-to="${i}" class="${isActive}" aria-label="Slide ${i+1}"></button>`;
-                innerImages += `
-                    <div class="carousel-item ${isActive}">
-                        <img src="${url}" class="d-block w-100 rounded" style="height:450px; object-fit:cover; background-color: #f8f9fa;">
-                    </div>`;
-            });
-            
-            carouselHtml = `
-                <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">${indicators}</div>
-                    <div class="carousel-inner">${innerImages}</div>
-                    ${imgs.length > 1 ? `
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>` : ''}
+                    </div>
                 </div>`;
-        } else {
-            carouselHtml = `<div class="d-flex align-items-center justify-content-center bg-light rounded" style="height: 450px;"><i class="fas fa-image fa-4x text-muted opacity-25"></i></div>`;
-        }
-        
-        const carouselArea = document.getElementById('modal-carousel-container');
-        if (carouselArea) {
-            carouselArea.innerHTML = carouselHtml;
-        }
-        
-        new bootstrap.Modal(document.getElementById('activityModal')).show();
+            container.innerHTML += cardHtml;
+        });
+    } catch (error) {
+        console.error('抓取成果資料失敗:', error);
+        container.innerHTML = '<div class="alert alert-warning w-100 text-center">目前尚無資料或資料同步失敗，請確認試算表權限。</div>';
     }
+}
 
-    document.addEventListener('DOMContentLoaded', fetch115Results);
-    </script>
+function openDetailModal(title, date, content, imgStr) {
+    document.getElementById('modal-title').innerText = title;
+    document.getElementById('modal-badge-container').innerHTML = `<span class="badge bg-primary rounded-pill px-3">${date}</span>`;
+    
+    // 排版引擎
+    let richText = content
+        .replace(/【(.*?)】/g, '<h5 class="fw-bold mt-4 mb-2" style="color: #0052d4; border-bottom: 2px solid #e9ecef; padding-bottom: 8px;"><i class="fas fa-caret-right me-2"></i>$1</h5>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong style="background-color: #fff3cd; padding: 2px 6px; border-radius: 4px; color: #856404; font-weight: bold;">$1</strong>')
+        .replace(/\n/g, '<br>');
+    document.getElementById('modal-content').innerHTML = richText;
+    
+    // 生成輪播圖
+    const imgs = imgStr.split(',').map(s => s.trim()).filter(url => url);
+    let carouselHtml = '';
+    
+    if (imgs.length > 0) {
+        let indicators = '';
+        let innerImages = '';
+        
+        imgs.forEach((url, i) => {
+            const isActive = i === 0 ? 'active' : '';
+            indicators += `<button type="button" data-bs-target="#carouselExample" data-bs-slide-to="${i}" class="${isActive}" aria-label="Slide ${i+1}"></button>`;
+            innerImages += `
+                <div class="carousel-item ${isActive}">
+                    <img src="${url}" class="d-block w-100 rounded" style="height:450px; object-fit:cover; background-color: #f8f9fa;">
+                </div>`;
+        });
+        
+        carouselHtml = `
+            <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">${indicators}</div>
+                <div class="carousel-inner">${innerImages}</div>
+                ${imgs.length > 1 ? `
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>` : ''}
+            </div>`;
+    } else {
+        carouselHtml = `<div class="d-flex align-items-center justify-content-center bg-light rounded" style="height: 450px;"><i class="fas fa-image fa-4x text-muted opacity-25"></i></div>`;
+    }
+    
+    const carouselArea = document.getElementById('modal-carousel-container');
+    if (carouselArea) {
+        carouselArea.innerHTML = carouselHtml;
+    }
+    
+    new bootstrap.Modal(document.getElementById('activityModal')).show();
+}
+
+document.addEventListener('DOMContentLoaded', fetch115Results);
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="components.js"></script>
