@@ -4,7 +4,7 @@
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdS4D4WXW-XPL9_OkJG2yBRNrl_TOHhjDaww&s" 
                  alt="健康科技學院 LOGO" width="40" height="40" class="d-inline-block align-top me-2 bg-white rounded-circle">
             <div class="d-flex flex-column" style="line-height: 1.2;">
-                <span style="font-size: 0.8rem; font-weight: normal;">北護大健康科技學院</span>
+                <span class="lang-text" data-zh="北護大健康科技學院" data-en="NTUNHS College of Health Technology" style="font-size: 0.8rem; font-weight: normal;">北護大健康科技學院</span>
                 <span>Resilience Together</span>
             </div>
         </a>
@@ -12,22 +12,54 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" id="nav-index" href="index.html">首頁</a></li>
-                <li class="nav-item"><a class="nav-link" id="nav-about" href="about.html">關於計畫</a></li>
-                <li class="nav-item"><a class="nav-link" id="nav-team" href="team.html">執行團隊</a></li>
-                <li class="nav-item"><a class="nav-link" id="nav-events" href="events.html">活動報名</a></li>
-		<li class="nav-item"><a class="nav-link" id="nav-manual" href="manual.html">USafe</a></li>
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+                <li class="nav-item">
+                    <a class="nav-link" id="nav-index" href="index.html">
+                        <span class="lang-text" data-zh="首頁" data-en="Home">首頁</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="nav-about" href="about.html">
+                        <span class="lang-text" data-zh="關於計畫" data-en="About">關於計畫</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="nav-team" href="team.html">
+                        <span class="lang-text" data-zh="執行團隊" data-en="Our Team">執行團隊</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="nav-events" href="events.html">
+                        <span class="lang-text" data-zh="活動報名" data-en="Events">活動報名</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="nav-manual" href="manual.html">USafe</a>
+                </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">成果專區</a>
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <span class="lang-text" data-zh="成果專區" data-en="Results">成果專區</span>
+                    </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="results-114.html">114 年度成果</a></li>
-                        <li><a class="dropdown-item" href="results-115.html">115 年度成果</a></li>
-                        <li><a class="dropdown-item" href="#">116 年度成果</a></li>
-
+                        <li><a class="dropdown-item" href="results-114.html">
+                            <span class="lang-text" data-zh="114 年度成果" data-en="2025 Results">114 年度成果</span>
+                        </a></li>
+                        <li><a class="dropdown-item" href="results-115.html">
+                            <span class="lang-text" data-zh="115 年度成果" data-en="2026 Results">115 年度成果</span>
+                        </a></li>
+                        <li><a class="dropdown-item" href="#">
+                            <span class="lang-text" data-zh="116 年度成果" data-en="2027 Results">116 年度成果</span>
+                        </a></li>
                     </ul>
                 </li>
-                
+                <!-- 語言切換按鈕 -->
+                <li class="nav-item ms-lg-2">
+                    <button id="lang-switch-btn" onclick="toggleLang()" 
+                            class="btn btn-sm btn-outline-light fw-bold px-3"
+                            style="border-radius: 20px; min-width: 48px;">
+                        EN
+                    </button>
+                </li>
             </ul>
         </div>
     </div>

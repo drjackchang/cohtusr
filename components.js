@@ -14,9 +14,52 @@ function loadComponent(id, file) {
             const navId = "nav-" + currentPath.replace(".html", "");
             const activeLink = document.getElementById(navId);
             if (activeLink) activeLink.classList.add("active");
+            // 載入 navbar 後，套用目前語言
+            applyLang(getCurrentLang());
+        }
+
+        if (id === 'footer-placeholder') {
+            // 載入 footer 後，套用目前語言
+            applyLang(getCurrentLang());
         }
     }).catch(err => console.error(err));
 }
+
+// ── 語言切換核心 ──────────────────────────────────────
+
+function getCurrentLang() {
+    return localStorage.getItem('siteLang') || 'zh';
+}
+
+function toggleLang() {
+    const newLang = getCurrentLang() === 'zh' ? 'en' : 'zh';
+    localStorage.setItem('siteLang', newLang);
+    applyLang(newLang);
+}
+
+function applyLang(lang) {
+    // 更新所有 .lang-text 元素
+    document.querySelectorAll('.lang-text').forEach(el => {
+        const text = el.getAttribute('data-' + lang);
+        if (text) el.textContent = text;
+    });
+
+    // 更新切換按鈕顯示
+    const btn = document.getElementById('lang-switch-btn');
+    if (btn) {
+        btn.textContent = lang === 'zh' ? 'EN' : '中';
+    }
+
+    // 更新 <html lang> 屬性
+    document.documentElement.lang = lang === 'zh' ? 'zh-Hant-TW' : 'en';
+}
+
+// 頁面載入時套用已儲存的語言
+document.addEventListener("DOMContentLoaded", function() {
+    applyLang(getCurrentLang());
+});
+
+// ── 活動新聞 ──────────────────────────────────────────
 
 async function fetchNews() {
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZK3wm2tlM3T1Qy2dCf6Gb96_8MJfdmnX9wCIYUSQ5K5hC44bGnl3hZXZeiH4v5f4QBksGZXoNTolE/pub?output=csv'; 
@@ -25,9 +68,7 @@ async function fetchNews() {
         const res = await fetch(csvUrl);
         const text = await res.text();
         
-        // 使用全新的超強 CSV 解析器，不再被 Alt+Enter 騙倒
         let rows = parseCSV(text).slice(1);
-
         rows = rows.filter(cols => cols.length >= 3 && cols[0].trim() !== "" && cols[2].trim() !== "");
         rows.reverse(); 
 
@@ -42,8 +83,10 @@ async function fetchNews() {
         if (!container) return;
         container.innerHTML = '';
 
+        const lang = getCurrentLang();
+
         if(rows.length === 0) {
-            container.innerHTML = '<p class="text-center text-muted py-5">目前尚無活動資料。</p>';
+            container.innerHTML = `<p class="text-center text-muted py-5">${lang === 'zh' ? '目前尚無活動資料。' : 'No events available.'}</p>`;
             return;
         }
 
@@ -60,8 +103,8 @@ async function fetchNews() {
                 img = 'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=800&auto=format&fit=crop'; 
             }
 
-            // 將資料安全編碼
             const safeData = encodeURIComponent(JSON.stringify([date, cat, title, summary, content, img, link]));
+            const readMore = lang === 'zh' ? '閱讀詳情 →' : 'Read More →';
 
             container.innerHTML += `
                 <div class="col-md-4 mb-4">
@@ -76,7 +119,7 @@ async function fetchNews() {
                             <p class="card-text text-secondary small" style="white-space: pre-wrap; line-height: 1.6;">${summary}</p>
                             <button class="btn btn-link p-0 fw-bold text-decoration-none" 
                                     onclick="openModal('${safeData}')">
-                                閱讀詳情 →
+                                ${readMore}
                             </button>
                         </div>
                     </div>
@@ -88,13 +131,14 @@ async function fetchNews() {
     }
 }
 
-// 修復彈窗：加入 max-height 限制圖片高度，並確保內容正確顯示
 window.openModal = function(encodedData) {
     const [date, cat, title, summary, content, img, link] = JSON.parse(decodeURIComponent(encodedData));
     const modalBody = document.getElementById('modal-body-content');
+    const lang = getCurrentLang();
     
     const hasLink = link && link.toLowerCase().startsWith('http');
-    const actionBtn = hasLink ? `<div class="mt-4"><a href="${link}" target="_blank" class="btn btn-primary btn-lg w-100 fw-bold">立即前往報名 / 連結</a></div>` : "";
+    const btnLabel = lang === 'zh' ? '立即前往報名 / 連結' : 'Register / Link';
+    const actionBtn = hasLink ? `<div class="mt-4"><a href="${link}" target="_blank" class="btn btn-primary btn-lg w-100 fw-bold">${btnLabel}</a></div>` : "";
 
     modalBody.innerHTML = `
         <img src="${img}" class="img-fluid rounded mb-4 w-100 shadow-sm" style="max-height: 300px; object-fit: cover;" onerror="this.style.display='none'">
@@ -107,7 +151,6 @@ window.openModal = function(encodedData) {
     new bootstrap.Modal(document.getElementById('activityModal')).show();
 };
 
-// 全新升級的 CSV 解析器：能正確處理儲存格內部的換行 (Alt+Enter)
 function parseCSV(text) {
     let result = [];
     let row = [];
@@ -117,7 +160,7 @@ function parseCSV(text) {
         let char = text[i];
         if (char === '"') {
             if (inQuote && text[i+1] === '"') {
-                cur += '"'; // 處理雙引號跳脫
+                cur += '"';
                 i++;
             } else {
                 inQuote = !inQuote;
