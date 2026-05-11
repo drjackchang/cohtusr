@@ -355,6 +355,73 @@
 </head>
 <body>
 
+<!-- 網站導覽列 -->
+<div style="background:#065F46; padding:14px 32px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 12px rgba(0,0,0,0.2);">
+  <div style="display:flex; align-items:center; gap:12px;">
+    <div style="width:32px; height:32px; background:#DC2626; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:900; color:white;">U</div>
+    <span style="color:white; font-weight:700; font-size:15px;">USafe 使用說明書</span>
+  </div>
+  <div style="display:flex; gap:16px; align-items:center;">
+    <a href="https://drjackchang.github.io/cohtusr/" style="color:rgba(255,255,255,0.8); font-size:13px; text-decoration:none;">← 返回官網</a>
+    <a href="https://usafe-drjackchang.vercel.app" target="_blank" style="background:#DC2626; color:white; padding:8px 18px; border-radius:100px; font-size:13px; font-weight:700; text-decoration:none;">開啟 App</a>
+  </div>
+</div>
+
+<!-- 介紹區塊 -->
+<div style="background:linear-gradient(135deg, #065F46 0%, #047857 100%); padding:64px 32px; text-align:center;">
+  <div style="max-width:700px; margin:0 auto;">
+    <div style="width:72px; height:72px; background:#DC2626; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:36px; font-weight:900; color:white; margin:0 auto 20px;">U</div>
+    <h1 style="color:white; font-size:36px; font-weight:900; margin-bottom:8px;">USafe <span style="color:#6EE7B7;">校園緊急應變系統</span></h1>
+    <p style="color:rgba(255,255,255,0.75); font-size:16px; margin-bottom:32px;">國立臺北護理健康大學 · Campus Emergency Response System</p>
+    
+    <!-- 三個功能 -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:40px;">
+      <div style="background:rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+        <div style="font-size:28px; margin-bottom:8px;">🚨</div>
+        <div style="color:white; font-size:13px; font-weight:700;">SOS 緊急求救</div>
+        <div style="color:rgba(255,255,255,0.6); font-size:11px; margin-top:4px;">即時通知急救員</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+        <div style="font-size:28px; margin-bottom:8px;">🛡️</div>
+        <div style="color:white; font-size:13px; font-weight:700;">急救先鋒志工</div>
+        <div style="color:rgba(255,255,255,0.6); font-size:11px; margin-top:4px;">就近派遣急救員</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.1); border-radius:12px; padding:16px;">
+        <div style="font-size:28px; margin-bottom:8px;">📢</div>
+        <div style="color:white; font-size:13px; font-weight:700;">全校安全通報</div>
+        <div style="color:rgba(255,255,255,0.6); font-size:11px; margin-top:4px;">LINE 即時回報</div>
+      </div>
+    </div>
+
+    <!-- QR Code + 按鈕 -->
+    <div style="display:flex; align-items:center; justify-content:center; gap:48px; flex-wrap:wrap;">
+      <div style="background:white; border-radius:16px; padding:20px; box-shadow:0 8px 32px rgba(0,0,0,0.2);">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://usafe-drjackchang.vercel.app&color=065F46&bgcolor=ffffff&qzone=1" 
+             alt="USafe QR Code" style="width:150px; height:150px; display:block;">
+        <div style="font-size:12px; color:#374151; font-weight:600; text-align:center; margin-top:10px;">手機掃描開啟</div>
+      </div>
+      <div style="text-align:left;">
+        <a href="https://usafe-drjackchang.vercel.app" target="_blank"
+           style="display:block; background:#DC2626; color:white; padding:14px 32px; border-radius:100px; font-size:15px; font-weight:700; text-decoration:none; text-align:center; margin-bottom:12px;">
+          立即開啟 USafe →
+        </a>
+        <a href="#manual-start"
+           style="display:block; background:rgba(255,255,255,0.15); color:white; padding:14px 32px; border-radius:100px; font-size:15px; font-weight:700; text-decoration:none; text-align:center; border:1px solid rgba(255,255,255,0.3);">
+          📖 查看使用說明 ↓
+        </a>
+        <p style="color:rgba(255,255,255,0.5); font-size:11px; text-align:center; margin-top:12px;">請使用 Safari 或 Chrome 開啟</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center; padding:32px; background:#F8F9FA;">
+  <span style="background:#065F46; color:white; padding:6px 20px; border-radius:100px; font-size:13px; font-weight:700;">📋 完整使用說明書</span>
+</div>
+
+<!-- 說明書錨點 -->
+<div id="manual-start"></div>
+
 <!-- COVER -->
 <div class="cover">
   <div class="cover-top">
