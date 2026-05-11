@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>USafe 使用說明書</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #DC2626;
+    --red-light: #FEE2E2;
+    --red-dark: #991B1B;
+    --green: #065F46;
+    --green-mid: #059669;
+    --green-light: #D1FAE5;
+    --gray-900: #111827;
+    --gray-700: #374151;
+    --gray-500: #6B7280;
+    --gray-200: #E5E7EB;
+    --gray-100: #F3F4F6;
+    --white: #FFFFFF;
+    --amber: #D97706;
+    --amber-light: #FEF3C7;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans TC', 'DM Sans', sans-serif;
+    color: var(--gray-900);
+    background: #F8F9FA;
+    line-height: 1.7;
+  }
+
+  /* ── COVER PAGE ── */
+  .cover {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto 40px;
+    background: var(--green);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 60px 56px;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 400px; height: 400px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  .cover::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -60px;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
+
+  .cover-top { position: relative; z-index: 1; }
+
+  .cover-logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 80px;
+  }
+
+  .cover-logo-icon {
+    width: 56px; height: 56px;
+    background: var(--red);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 900; color: white;
+  }
+
+  .cover-logo-text { color: white; }
+  .cover-logo-text .name { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+  .cover-logo-text .sub { font-size: 11px; font-weight: 300; opacity: 0.7; letter-spacing: 2px; text-transform: uppercase; }
+
+  .cover-title { color: white; }
+  .cover-title h1 { font-size: 48px; font-weight: 900; line-height: 1.2; margin-bottom: 16px; }
+  .cover-title h1 span { color: #6EE7B7; }
+  .cover-title p { font-size: 16px; font-weight: 400; color: #6EE7B7; letter-spacing: 0.5px; }
+
+  .cover-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 100px;
+    padding: 8px 20px;
+    color: white;
+    font-size: 13px;
+    margin-top: 32px;
+  }
+  .cover-badge .dot { width: 6px; height: 6px; background: #6EE7B7; border-radius: 50%; }
+
+  .cover-bottom {
+    position: relative; z-index: 1;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .cover-bottom .school { color: rgba(255,255,255,0.85); font-size: 14px; font-weight: 500; }
+  .cover-bottom .version { color: rgba(255,255,255,0.5); font-size: 12px; }
+
+  /* ── CONTENT PAGES ── */
+  .page {
+    width: 210mm;
+    margin: 0 auto 40px;
+    background: white;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  .page-header {
+    background: var(--green);
+    padding: 18px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .page-header .logo-small { display: flex; align-items: center; gap: 10px; }
+  .page-header .logo-small .icon {
+    width: 28px; height: 28px; background: var(--red);
+    border-radius: 7px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 900; color: white;
+  }
+  .page-header .logo-small span { color: white; font-size: 14px; font-weight: 600; }
+  .page-header .chapter { color: rgba(255,255,255,0.6); font-size: 12px; }
+
+  .page-content { padding: 44px 48px; }
+
+  .page-footer {
+    border-top: 1px solid var(--gray-200);
+    padding: 14px 48px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--gray-500);
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .section-title {
+    font-size: 24px; font-weight: 900; color: var(--green);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-title::before {
+    content: '';
+    width: 4px; height: 26px;
+    background: var(--red);
+    border-radius: 2px;
+    display: inline-block;
+    flex-shrink: 0;
+  }
+
+  .section-subtitle {
+    font-size: 15px; font-weight: 700; color: var(--gray-700);
+    margin: 28px 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--gray-100);
+  }
+
+  .subsection-title {
+    font-size: 13.5px; font-weight: 700; color: var(--gray-700);
+    margin: 18px 0 6px;
+  }
+
+  p { font-size: 13px; color: var(--gray-700); margin-bottom: 8px; line-height: 1.8; }
+
+  /* ── SCREENSHOTS ── */
+  .screenshot {
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 12px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    background: var(--gray-100);
+  }
+  .screenshot img {
+    width: 100%;
+    display: block;
+  }
+  .screenshot-caption {
+    font-size: 11px;
+    color: var(--gray-500);
+    text-align: center;
+    padding: 6px;
+    background: var(--gray-100);
+  }
+
+  .screenshot-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 12px 0;
+  }
+
+  .screenshot-row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 12px 0;
+  }
+
+  .screenshot-full {
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 12px 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+  }
+  .screenshot-full img { width: 100%; display: block; }
+
+  /* ── COMPONENTS ── */
+  .note {
+    background: var(--amber-light);
+    border-left: 4px solid var(--amber);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    color: var(--gray-700);
+  }
+  .note strong { color: var(--amber); }
+
+  .tip {
+    background: var(--green-light);
+    border-left: 4px solid var(--green-mid);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    color: var(--gray-700);
+  }
+  .tip strong { color: var(--green-mid); }
+
+  .alert-box {
+    background: var(--red-light);
+    border-left: 4px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-size: 12.5px;
+    color: var(--gray-700);
+  }
+  .alert-box strong { color: var(--red); }
+
+  ol, ul { padding-left: 18px; margin: 6px 0 10px; }
+  li { font-size: 13px; color: var(--gray-700); margin-bottom: 5px; line-height: 1.7; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 12.5px;
+  }
+  th {
+    background: var(--green);
+    color: white;
+    padding: 9px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--gray-200); color: var(--gray-700); }
+  tr:nth-child(even) td { background: var(--gray-100); }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .card {
+    background: var(--gray-100);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .card-icon { font-size: 22px; margin-bottom: 6px; }
+  .card-title { font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+  .card-desc { font-size: 11.5px; color: var(--gray-500); line-height: 1.5; }
+
+  .step-list { margin: 10px 0; }
+  .step { display: flex; gap: 12px; margin-bottom: 10px; align-items: flex-start; }
+  .step-num {
+    width: 22px; height: 22px; min-width: 22px;
+    background: var(--red);
+    border-radius: 50%;
+    color: white;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-content { font-size: 13px; color: var(--gray-700); padding-top: 2px; line-height: 1.7; }
+
+  .divider { height: 1px; background: var(--gray-200); margin: 24px 0; }
+
+  /* ── TOC ── */
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .toc-chapter { display: flex; align-items: center; gap: 12px; }
+  .toc-num {
+    width: 30px; height: 30px;
+    background: var(--green);
+    border-radius: 8px;
+    color: white;
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .toc-text { font-size: 13.5px; font-weight: 600; color: var(--gray-700); }
+  .toc-dots { flex: 1; border-bottom: 1px dotted var(--gray-200); margin: 0 12px; height: 1px; align-self: center; }
+  .toc-page { font-size: 12px; color: var(--gray-500); font-weight: 500; }
+
+  .emergency-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .emergency-card {
+    background: var(--red-light);
+    border: 1px solid #FECACA;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .emergency-card .phone { font-size: 18px; font-weight: 900; color: var(--red); }
+  .emergency-card .label { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+
+  .url-box {
+    background: var(--green);
+    border-radius: 10px;
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 14px 0;
+  }
+  .url-box .url { color: white; font-size: 14px; font-weight: 700; }
+  .url-box .badge-white { background: rgba(255,255,255,0.2); color: white; font-size: 11px; padding: 3px 10px; border-radius: 100px; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-logo">
+      <div class="cover-logo-icon">U</div>
+      <div class="cover-logo-text">
+        <div class="name">USafe</div>
+        <div class="sub">Campus Emergency Response System</div>
+      </div>
+    </div>
+    <div class="cover-title">
+      <h1>使用<span>說明書</span></h1>
+      <p>完整功能指南 · 操作步驟 · 緊急應變流程</p>
+      <div class="cover-badge">
+        <span class="dot"></span>
+        版本 1.0 &nbsp;|&nbsp; 2026年5月
+      </div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <div class="school">🏫 國立臺北護理健康大學健康科技學院USR計畫</div>
+    <div class="version">USafe v1.0 · 校園緊急應變系統</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="page">
+  <div class="page-header">
+    <div class="logo-small"><div class="icon">U</div><span>USafe 使用說明書</span></div>
+    <div class="chapter">目錄</div>
+  </div>
+  <div class="page-content">
+    <div class="section-title">目錄</div>
+    <p style="margin-bottom:20px; color: var(--gray-500);">本說明書完整涵蓋 USafe 系統的所有功能操作說明。</p>
+    <div class="toc-item"><div class="toc-chapter"><div class="toc-num">一</div><div class="toc-text">系統簡介</div></div><div class="toc-dots"></div><div class="toc-page">P.3</div></div>
+    <div class="toc-item"><div class="toc-chapter"><div class="toc-num">二</div><div class="toc-text">開始使用（登入與初次設定）</div></div><div class="toc-dots"></div><div class="toc-page">P.4</div></div>
+    <div class="toc-item"><div class="toc-chapter"><div class="toc-num">三</div><div class="toc-text">一般用戶功能</div></div><div class="toc-dots"></div><div class="toc-page">P.6</div></div>
+    <div class="toc-item"><div class="toc-chapter"><div class="toc-num">四</div><div class="toc-text">急救志工功能</div></div><div class="toc-dots"></div><div class="toc-page">P.12</div></div>
+    <div class="toc-item"><div class="toc-chapter"><div class="toc-num">五</div><div class="toc-text">管理員功能</div></div><div class="toc-dots"></div><div class="toc-page">P.16</div></div>
+    <div class="toc-item"><div class="toc-chapter"><div class="toc-num">六</div><div class="toc-text">常見問題</div></div><div class="toc-dots"></div><div class="toc-page">P.22</div></div>
+  </div>
+  <div class="page-footer"><span>USafe 校園緊急應變系統 © 2026 國立臺北護理健康大學</span><span>目錄</span></div>
+</div>
+
+<!-- CHAPTER 1 -->
+<div class="page">
+  <div class="page-header">
+    <div class="logo-small"><div class="icon">U</div><span>USafe 使用說明書</span></div>
+    <div class="chapter">第一章 · 系統簡介</div>
+  </div>
+  <div class="page-content">
+    <div class="section-title">系統簡介</div>
+    <p>USafe 是專為<strong>國立臺北護理健康大學</strong>設計的校園緊急應變系統，整合緊急求救、急救志工派遣、全校安全通報等功能，讓師生在緊急狀況下能夠快速求救、接收通知並回報安全狀況。</p>
+
+    <div class="section-subtitle">主要功能</div>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🚨</div><div class="card-title">一鍵 SOS 緊急求救</div><div class="card-desc">選擇事件類型，精準回報位置，即時通知急救員與校安中心</div></div>
+      <div class="card"><div class="card-icon">🛡️</div><div class="card-title">急救先鋒（CFR）系統</div><div class="card-desc">具備急救證照的師生可登記成為認證急救員，接收附近求救通知</div></div>
+      <div class="card"><div class="card-icon">📢</div><div class="card-title">全校安全通報</div><div class="card-desc">管理員發布警報，全校師生收到通知並回報安全狀況</div></div>
+      <div class="card"><div class="card-icon">💙</div><div class="card-title">AED 位置地圖</div><div class="card-desc">校園內 AED 位置一目瞭然，緊急時快速導航前往</div></div>
+      <div class="card"><div class="card-icon">📋</div><div class="card-title">離線防災指南</div><div class="card-desc">CPR、AED、止血、地震、火災應變指南，無網路也可查看</div></div>
+      <div class="card"><div class="card-icon">💚</div><div class="card-title">LINE 即時通知</div><div class="card-desc">綁定 LINE 後，警報直接發送至 LINE，可在 LINE 內直接回報</div></div>
+    </div>
+
+    <div class="section-subtitle">系統網址</div>
+    <div class="url-box">
+      <div class="url">https://usafe-drjackchang.vercel.app</div>
+      <div class="badge-white">PWA 支援</div>
+    </div>
+    <div class="alert-box"><strong>⚠️ 重要：</strong>請使用 <strong>Safari 或 Chrome</strong> 開啟，請勿在 LINE 內直接點擊連結，否則 Google 登入會被封鎖。</div>
+    <div class="tip"><strong>💡 iOS 用戶建議：</strong>用 Safari 開啟後，點下方分享按鈕 →「加入主畫面」，可像原生 App 一樣使用，並支援離線閱讀防災指南。</div>
+
+    <div class="section-subtitle">緊急聯絡資訊</div>
+    <div class="emergency-grid">
+      <div class="emergency-card"><div class="phone">02-28214744</div><div class="label">校安中心（24小時）</div></div>
+      <div class="emergency-card"><div class="phone">119</div><div class="label">火災／急救</div></div>
+      <div class="emergency-card"><div class="phone">110</div><div class="label">警察</div></div>
+    </div>
+  </div>
+  <div class="page-footer"><span>USafe 校園緊急應變系統 © 2026 國立臺北護理健康大學</span><span>P.3</span></div>
+</div>
+
+<!-- CHAPTER 2 -->
+<div class="page">
+  <div class="page-header">
+    <div class="logo-small"><div class="icon">U</div><span>USafe 使用說明書</span></div>
+    <div class="chapter">第二章 · 開始使用</div>
+  </div>
+  <div class="page-content">
+    <div class="section-title">開始使用</div>
+
+    <div class="section-subtitle">2.1 登入系統</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778467373/971649_qpslgh.jpg" alt="登入頁面">
+      <div class="screenshot-caption">登入頁面</div>
+    </div>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-content">使用 <strong>Safari 或 Chrome</strong> 開啟系統網址</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">點擊「使用 Google 帳號登入」</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">選擇您的 Google 帳號完成登入</div></div>
+    </div>
+
+    <div class="section-subtitle">2.2 初次設定（Onboarding）</div>
+    <p>首次登入後，系統會引導您完成初始設定，建議花 2-3 分鐘完成。</p>
+
+    <div class="screenshot-row">
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466036/S__26353689_0_uznq0g.jpg" alt="Onboarding 介紹頁">
+        <div class="screenshot-caption">功能介紹頁面</div>
+      </div>
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466055/S__26353693_0_wm8d4s.jpg" alt="身份選擇頁">
+        <div class="screenshot-caption">身份選擇頁面</div>
+      </div>
+    </div>
+
+    <p><strong>步驟一</strong>：滑動查看系統功能介紹</p>
+    <p><strong>步驟二</strong>：選擇您在學校的身份（<strong>學生 / 教職員 / 其他</strong>）</p>
+
+    <div class="screenshot-row">
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466072/S__26353695_0_fwbefc.jpg" alt="LINE 綁定頁">
+        <div class="screenshot-caption">LINE 綁定碼畫面</div>
+      </div>
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466522/S__26353696_0_uocixi.jpg" alt="LINE 綁定成功">
+        <div class="screenshot-caption">LINE 綁定成功畫面</div>
+      </div>
+    </div>
+
+    <p><strong>步驟三：綁定 LINE（強烈建議）</strong></p>
+    <div class="tip"><strong>💡 為什麼要綁定 LINE？</strong> 綁定後，緊急警報會直接發送到您的 LINE，即使沒有開啟 App 也能即時收到通知，並可在 LINE 內直接按鈕回報安全狀況。</div>
+
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-content">點擊「取得綁定碼」，系統產生 6 位數綁定碼（10 分鐘內有效）</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">記下綁定碼</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">點擊「開啟 LINE Bot」，加 <strong>USafe 校園緊急通報（@102ienck）</strong>為好友</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">將 6 位數綁定碼傳送給 Bot</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content">收到「✅ LINE 綁定成功！」即完成</div></div>
+    </div>
+    <div class="note"><strong>📝</strong> 可點「跳過」稍後在設定頁（SETTINGS）完成綁定。</div>
+  </div>
+  <div class="page-footer"><span>USafe 校園緊急應變系統 © 2026 國立臺北護理健康大學</span><span>P.4–5</span></div>
+</div>
+
+<!-- CHAPTER 3 -->
+<div class="page">
+  <div class="page-header">
+    <div class="logo-small"><div class="icon">U</div><span>USafe 使用說明書</span></div>
+    <div class="chapter">第三章 · 一般用戶功能</div>
+  </div>
+  <div class="page-content">
+    <div class="section-title">一般用戶功能</div>
+
+    <div class="section-subtitle">3.1 首頁介面</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466093/S__26353697_0_kgqonc.jpg" alt="首頁">
+      <div class="screenshot-caption">首頁（正常狀態）</div>
+    </div>
+    <table>
+      <tr><th>區塊</th><th>說明</th></tr>
+      <tr><td>校園狀態橫幅</td><td>顯示目前校園安全狀況，警報時自動變紅色</td></tr>
+      <tr><td>急救志工待命</td><td>認證急救員可切換上線／離線接收求救通知</td></tr>
+      <tr><td>緊急求救區</td><td>選擇事件類型（醫療／火災／安全）並發送 SOS</td></tr>
+      <tr><td>快速捷徑</td><td>直撥校安中心、AED 地圖、防災指南、健康資訊</td></tr>
+    </table>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">3.2 發送 SOS 緊急求救</div>
+    <div class="screenshot-row">
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466197/971638_jhjapr.jpg" alt="SOS 位置選擇">
+        <div class="screenshot-caption">SOS 位置選擇</div>
+      </div>
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466218/S__26361859_0_nbu4wt.jpg" alt="SOS 確認畫面">
+        <div class="screenshot-caption">SOS 已送出確認畫面</div>
+      </div>
+    </div>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-content">在首頁選擇事件類型：<strong>醫療 / 火災 / 安全</strong></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">滑動「← 滑動以發送 SOS →」按鈕</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">選擇建築物、樓層，輸入詳細地點描述（例如：男廁旁、電梯口）</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">按「確認位置並送出 SOS」</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content">確認畫面即時顯示前往救援的急救員人數、攜帶器材及校安中心派遣訊息</div></div>
+    </div>
+    <div class="alert-box"><strong>⚠️ 重要：</strong>送出 SOS 後請保持冷靜，留在安全處並保持手機暢通，等待急救員或校安人員到達。</div>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">3.3 個人資料設定</div>
+    <div class="screenshot-row">
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466309/971630_0_cyc8ds.jpg" alt="個人資料頁1">
+        <div class="screenshot-caption">個人資料（上半部）</div>
+      </div>
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466346/971626_0_ss2ipx.jpg" alt="個人資料頁2">
+        <div class="screenshot-caption">個人資料（下半部）</div>
+      </div>
+    </div>
+    <p>點擊首頁右上角頭像 → 個人資料，填寫：</p>
+    <ul>
+      <li>真實姓名</li>
+      <li>學號 / 員工編號</li>
+      <li>科系 / 班級</li>
+      <li>所屬單位</li>
+      <li>身份類別（學生 / 教職員 / 其他）</li>
+    </ul>
+    <div class="tip"><strong>💡</strong> 填寫完整資料有助於緊急事故後的統計與追蹤，也讓管理員在緊急狀況時能更快確認您的身份。</div>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">3.4 健康資訊</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466414/971637_0_fv5sqx.jpg" alt="健康資訊頁">
+      <div class="screenshot-caption">健康資訊頁</div>
+    </div>
+    <p>點擊首頁「我的健康資訊」，填寫：</p>
+    <ul>
+      <li>血型（A / B / AB / O，加 Rh+/-）</li>
+      <li>過敏藥物</li>
+      <li>慢性疾病</li>
+      <li>目前用藥</li>
+      <li><strong>緊急聯絡人姓名、電話、關係</strong></li>
+    </ul>
+    <div class="tip"><strong>💡</strong> 當您回報需要救援時，管理員可透過系統直接撥打您的緊急聯絡人電話，請務必填寫正確資訊。</div>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">3.5 防災指南</div>
+    <div class="screenshot-row">
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466539/971636_0_i1n4w0.jpg" alt="防災指南卡片">
+        <div class="screenshot-caption">防災指南卡片列表</div>
+      </div>
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466521/971633_0_k6z5tr.jpg" alt="防災指南內容">
+        <div class="screenshot-caption">指南詳細內容</div>
+      </div>
+    </div>
+    <table>
+      <tr><th>指南</th><th>內容</th></tr>
+      <tr><td>🔥 火災應變</td><td>逃生步驟、消防警報位置、集合點</td></tr>
+      <tr><td>🌊 地震應變</td><td>趴下、掩護、抓穩（Drop, Cover, Hold On）</td></tr>
+      <tr><td>🔪 無差別攻擊</td><td>Run（逃跑）→ Hide（躲避）→ Fight（反擊）</td></tr>
+      <tr><td>❤️ CPR</td><td>30:2 心肺復甦術完整步驟</td></tr>
+      <tr><td>⚡ AED</td><td>自動體外電擊器使用步驟與注意事項</td></tr>
+      <tr><td>🩹 緊急止血</td><td>直接加壓、傷口填塞、止血帶 STB</td></tr>
+    </table>
+    <div class="tip"><strong>💡</strong> 防災指南支援<strong>離線閱讀</strong>，無網路時也可查看。</div>
+    <div class="note"><strong>📍</strong> 科技大樓 1F 健康中心外設有 AED，AED 上方備有止血包，緊急時可立即取用。</div>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">3.6 AED 地圖</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466522/971634_0_wifwdg.jpg" alt="AED 地圖">
+      <div class="screenshot-caption">AED 校園地圖</div>
+    </div>
+    <table>
+      <tr><th>建築物</th><th>樓層</th><th>位置說明</th></tr>
+      <tr><td>爾雅樓</td><td>1F</td><td>杏一美食廣場</td></tr>
+      <tr><td>學思樓</td><td>2F</td><td>蘇杭餐廳外</td></tr>
+      <tr><td>科技大樓</td><td>1F</td><td>健康中心外（上方有止血包）</td></tr>
+      <tr><td>學生餐廳</td><td>1F</td><td>餐廳門口外（蘭心和惠質樓宿舍間）</td></tr>
+      <tr><td>學生活動中心</td><td>1F</td><td>城區部・活動中心外</td></tr>
+    </table>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">3.7 LINE 安全通報回報</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466520/971632_0_qg4cfb.png" alt="LINE 警報訊息">
+      <div class="screenshot-caption">LINE 收到警報訊息卡片及需要救援輸入位置畫面</div>
+    </div>
+    <p>當校園發生重大事故時，已綁定 LINE 的用戶會收到訊息卡片，可直接在 LINE 內按：</p>
+    <ul>
+      <li>「✅ 我已安全」：立即完成回報</li>
+      <li>「🆘 我需要救援」：系統請您輸入位置（文字或 GPS），管理員可直接撥打緊急聯絡人電話</li>
+    </ul>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">3.8 設定頁</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466521/971635_0_lcck7y.jpg" alt="設定頁">
+      <div class="screenshot-caption">設定頁</div>
+    </div>
+    <ul>
+      <li>查看／修改身份設定</li>
+      <li>綁定或重新綁定 LINE</li>
+      <li>切換語言（繁體中文 / English）</li>
+      <li>切換急救志工待命狀態</li>
+      <li>登出帳號</li>
+    </ul>
+  </div>
+  <div class="page-footer"><span>USafe 校園緊急應變系統 © 2026 國立臺北護理健康大學</span><span>P.6–11</span></div>
+</div>
+
+<!-- CHAPTER 4 -->
+<div class="page">
+  <div class="page-header">
+    <div class="logo-small"><div class="icon">U</div><span>USafe 使用說明書</span></div>
+    <div class="chapter">第四章 · 急救志工功能</div>
+  </div>
+  <div class="page-content">
+    <div class="section-title">急救志工功能</div>
+    <p>具備急救證照的師生，經管理員審核通過後升級為「<strong>認證急救員</strong>」，可接收附近求救通知並即時前往救援，實踐「急救先鋒（Community First Responder）」精神。</p>
+
+    <div class="section-subtitle">4.1 上傳急救證照</div>
+    <p>點擊首頁右上角頭像 → 個人資料 → 登記急救證照：</p>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-content">選擇證照類型（EMT-1 / EMT-2 / EMT-P / BLS / AED / CPR / ACLS / STB）</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">填寫發照機構（例如：衛生福利部、台灣紅十字會）</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">填寫證照到期日</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">上傳證照圖片或 PDF</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content">按「提交審核」，等待管理員審核（通常 1-3 個工作天）</div></div>
+    </div>
+    <div class="tip"><strong>💡</strong> 審核通過後，您的身份會升級為「認證急救員」，首頁會出現志工待命開關。</div>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">4.2 接收求救通知</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466638/971625_0_uzdcu5.jpg" alt="求救通知卡片">
+      <div class="screenshot-caption">首頁顯示求救通知卡片</div>
+    </div>
+    <p>上線時，附近有人發送 SOS，首頁會出現求救通知卡片，顯示事件類型、位置、時間及已前往的急救員人數。</p>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">4.3 前往救援流程</div>
+    <div class="screenshot-row">
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466637/971624_0_mwkftl.jpg" alt="前往救援頁面">
+        <div class="screenshot-caption">前往救援頁面</div>
+      </div>
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466643/971620_0_nz83ps.jpg" alt="器材選擇">
+        <div class="screenshot-caption">器材選擇畫面</div>
+      </div>
+    </div>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-content">點擊「前往救援」進入救援頁面，確認事件位置</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">勾選攜帶的器材（甦醒球 BVM / AED / 急救包 / 止血帶 STB / 氧氣設備 / 擔架）</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">抵達現場後按「我已抵達現場」</div></div>
+    </div>
+
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466637/971621_0_kovfaq.jpg" alt="抵達後選項">
+      <div class="screenshot-caption">抵達後選項 Modal</div>
+    </div>
+    <div class="step-list">
+      <div class="step"><div class="step-num">4</div><div class="step-content">選擇現場狀況：✅ 已接觸求救者 / ❓ 未找到求救者 / 🆘 需要更多人支援</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-content">救援結束後按「結束救援」返回首頁</div></div>
+    </div>
+    <div class="note"><strong>📝</strong> 救援頁面底部有快速捷徑：📋 應變指南、🗺️ AED 地圖、📞 校安中心，隨時可查閱或撥打。</div>
+  </div>
+  <div class="page-footer"><span>USafe 校園緊急應變系統 © 2026 國立臺北護理健康大學</span><span>P.12–15</span></div>
+</div>
+
+<!-- CHAPTER 5 -->
+<div class="page">
+  <div class="page-header">
+    <div class="logo-small"><div class="icon">U</div><span>USafe 使用說明書</span></div>
+    <div class="chapter">第五章 · 管理員功能</div>
+  </div>
+  <div class="page-content">
+    <div class="section-title">管理員功能</div>
+
+    <div class="section-subtitle">5.1 管理後台首頁</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466785/971640_e5mmhb.jpg" alt="管理後台">
+      <div class="screenshot-caption">管理員後台首頁</div>
+    </div>
+    <p>登入管理員帳號後，首頁右上角會出現「<strong>後台</strong>」按鈕，點擊進入，包含三個功能區塊：派遣儀表板、證照審核、安全通報。</p>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">5.2 派遣儀表板</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466806/971619_0_spglow.jpg" alt="派遣儀表板">
+      <div class="screenshot-caption">即時派遣儀表板</div>
+    </div>
+    <table>
+      <tr><th>按鈕</th><th>說明</th></tr>
+      <tr><td>接案派遣</td><td>輸入派遣訊息（例如：健康中心人員 3 分鐘內抵達），求救者即時收到通知</td></tr>
+      <tr><td>標記結案</td><td>事件處理完成，移至已結案列表</td></tr>
+      <tr><td>📊 匯出 Excel</td><td>匯出所有事件記錄，包含急救員資訊、器材、位置</td></tr>
+    </table>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">5.3 證照審核</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778467103/970755_0_fjw1to.jpg" alt="證照審核">
+      <div class="screenshot-caption">證照審核頁面</div>
+    </div>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-content">點擊「查看證照圖片」確認證照真實性</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">「✓ 核准」：用戶升級為認證急救員，可接收附近求救通知</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">「✕ 拒絕」：退回申請，用戶可重新上傳</div></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">5.4 安全通報系統</div>
+    <div class="screenshot">
+      <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778466847/971616_0_zvlz8v.jpg" alt="安全通報控制台">
+      <div class="screenshot-caption">安全通報控制台及發布警報表單（含演習模式開關）</div>
+    </div>
+    <p><strong>發布警報步驟：</strong></p>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-content">選擇警報類型（地震／颱風／火災／無差別攻擊／其他）</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-content">若為演習，開啟「🎯 演習模式」開關（通知標題自動加上【演習】字樣，LINE 訊息為橘色）</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-content">填寫警報標題和說明內容</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-content">按「發布警報」，系統同時發送 App 推播和 LINE 訊息給所有用戶</div></div>
+    </div>
+
+    <div class="screenshot-row">
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778467102/970649_0_udotqn.jpg" alt="安全通報統計">
+        <div class="screenshot-caption">安全通報統計（身份分類）</div>
+      </div>
+      <div class="screenshot">
+        <img src="https://res.cloudinary.com/dcflrxcnb/image/upload/v1778467101/971648_mscrmv.jpg" alt="需要救援列表">
+        <div class="screenshot-caption">需要救援列表（含直撥按鈕）</div>
+      </div>
+    </div>
+
+    <p><strong>即時統計：</strong>警報發布後，後台即時顯示回報進度與身份分類（學生／教職員／其他）</p>
+    <p><strong>需要救援列表：</strong>顯示用戶姓名、回報位置，「📞 直撥」按鈕可直接撥打緊急聯絡人電話</p>
+    <p><strong>重新通知：</strong>「重新通知未回應者」對尚未回報的用戶再次發送推播和 LINE 通知</p>
+    <div class="note"><strong>📝</strong> 事件處理完成後按「結束警報」，可匯出 CSV 報告存檔。</div>
+  </div>
+  <div class="page-footer"><span>USafe 校園緊急應變系統 © 2026 國立臺北護理健康大學</span><span>P.16–21</span></div>
+</div>
+
+<!-- CHAPTER 6 FAQ -->
+<div class="page">
+  <div class="page-header">
+    <div class="logo-small"><div class="icon">U</div><span>USafe 使用說明書</span></div>
+    <div class="chapter">第六章 · 常見問題</div>
+  </div>
+  <div class="page-content">
+    <div class="section-title">常見問題</div>
+
+    <div class="subsection-title">Q：登入失敗怎麼辦？</div>
+    <p>請確認使用 <strong>Safari 或 Chrome</strong> 開啟系統，不要在 LINE 內直接點擊連結。LINE 內建瀏覽器不支援 Google 登入。</p>
+
+    <div class="subsection-title">Q：沒有收到推播通知？</div>
+    <p>請確認已允許通知權限：</p>
+    <ul>
+      <li>iOS：設定 → Safari → 通知 → 允許</li>
+      <li>Android：設定 → 應用程式 → Chrome → 通知 → 允許</li>
+    </ul>
+
+    <div class="subsection-title">Q：LINE 沒有收到通知？</div>
+    <ul>
+      <li>確認已完成 LINE 綁定（設定頁顯示「已綁定」）</li>
+      <li>確認已加 <strong>USafe 校園緊急通報（@102ienck）</strong>為好友</li>
+      <li>確認 LINE 通知未被靜音</li>
+    </ul>
+
+    <div class="subsection-title">Q：如何重新綁定 LINE？</div>
+    <p>設定頁 → LINE 綁定狀態 → 點擊重新綁定 → 取得新綁定碼 → 傳給 Bot 完成綁定。</p>
+
+    <div class="subsection-title">Q：找不到「後台」按鈕？</div>
+    <p>後台按鈕只有管理員帳號才會顯示。如需管理員權限，請聯繫系統管理員。</p>
+
+    <div class="subsection-title">Q：上傳證照後多久審核？</div>
+    <p>由管理員人工審核，通常在 <strong>1-3 個工作天</strong>內完成。審核通過後系統會更新您的身份為「認證急救員」。</p>
+
+    <div class="subsection-title">Q：SOS 誤觸怎麼辦？</div>
+    <p>在確認畫面點「取消求救」即可取消。為避免誤觸，SOS 按鈕需要滑動才能觸發。</p>
+
+    <div class="subsection-title">Q：手機加入主畫面後和一般 App 有什麼不同？</div>
+    <p>加入主畫面後（PWA），USafe 會以全螢幕方式開啟，體驗接近原生 App，同時支援防災指南離線閱讀。</p>
+
+    <div class="divider"></div>
+
+    <div class="section-subtitle">緊急聯絡資訊</div>
+    <div class="emergency-grid">
+      <div class="emergency-card"><div class="phone">02-28214744</div><div class="label">校安中心（24小時）</div></div>
+      <div class="emergency-card"><div class="phone">119</div><div class="label">火災／急救</div></div>
+      <div class="emergency-card"><div class="phone">110</div><div class="label">警察</div></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="text-align:center; padding: 20px 0; color: var(--gray-500);">
+      <div style="font-size:28px; margin-bottom:10px; color: var(--red); font-weight:900;">U</div>
+      <div style="font-size:14px; font-weight:700; color: var(--green);">USafe 校園緊急應變系統</div>
+      <div style="font-size:12px; margin-top:4px;">國立臺北護理健康大學 · 版本 1.0 · 2026年5月</div>
+      <div style="font-size:11px; margin-top:6px;">https://usafe-drjackchang.vercel.app</div>
+    </div>
+  </div>
+  <div class="page-footer"><span>USafe 校園緊急應變系統 © 2026 國立臺北護理健康大學</span><span>P.22</span></div>
+</div>
+
+</body>
+</html>
