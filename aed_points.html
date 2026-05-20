@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校園 AED 尋寶圖與導航系統</title>
+    <!-- 引入 Leaflet 的 CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        header {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .controls {
+            background-color: #f5f5f5;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #fff;
+            border: 2px solid #d32f2f;
+            color: #d32f2f;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        button:hover {
+            background-color: #d32f2f;
+            color: #fff;
+        }
+        #map {
+            flex-grow: 1;
+            width: 100%;
+        }
+        .popup-content {
+            text-align: center;
+        }
+        .popup-content h3 {
+            margin: 5px 0;
+            color: #d32f2f;
+            font-size: 16px;
+        }
+        .popup-content p {
+            margin: 5px 0 15px 0;
+            font-size: 14px;
+            color: #555;
+        }
+        .nav-btn {
+    display: inline-block;
+    background-color: #1976d2;
+    color: white !important;  /* 加入 !important 強制變成白色 */
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+        .nav-btn:hover {
+            background-color: #1565c0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🏥 國立臺北護理健康大學 AED 分布圖</h1>
+    </header>
+
+    <div class="controls">
+        <button onclick="focusCampus('shipai')">📍 石牌校區</button>
+        <button onclick="focusCampus('downtown')">📍 城區部</button>
+        <button onclick="showAll()">🌐 顯示全部</button>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- 引入 Leaflet 的 JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // 初始化地圖，預設中心點設在石牌校區
+        const map = L.map('map').setView([25.118, 121.519], 16);
+
+        // 載入 OpenStreetMap 圖資
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // 自訂 AED 標記圖示 (紅色圓點)
+        const aedIcon = L.divIcon({
+            className: 'custom-div-icon',
+            html: "<div style='background-color:#d32f2f; width:24px; height:24px; border-radius:50%; border:3px solid white; box-shadow: 0 0 5px rgba(0,0,0,0.5); display:flex; justify-content:center; align-items:center; color:white; font-weight:bold; font-size:12px;'>+</div>",
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -15]
+        });
+
+        // AED 資料
+        const aedData = [
+            {
+                name: "健康中心",
+                campus: "shipai",
+                note: "上方有止血包",
+                lat: 25.117676171999523, 
+                lng: 121.5210018478487
+            },
+            {
+                name: "學生餐廳",
+                campus: "shipai",
+                note: "蘭心惠質樓間",
+                lat: 25.11758280421597, 
+                lng: 121.51841603354991
+            },
+            {
+                name: "爾雅樓1樓美食廣場",
+                campus: "shipai",
+                note: "公共區域",
+                lat: 25.118294590068707, 
+                lng: 121.51819253874802
+            },
+            {
+                name: "學思樓二樓蘇杭餐廳",
+                campus: "shipai",
+                note: "餐廳入口附近",
+                lat: 25.118545423311943, 
+                lng: 121.51909554122979
+            },
+            {
+                name: "學生活動中心",
+                campus: "downtown",
+                note: "城區部活動中心",
+                lat: 25.042329417768215, 
+                lng: 121.50304702758409
+            }
+        ];
+
+        const markers = [];
+
+        // 將資料加入地圖
+        aedData.forEach(item => {
+            // Google Maps 導航連結 (api=1&destination=緯度,經度)
+            const navLink = `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`;
+            
+            // 彈出視窗 HTML
+            const popupHtml = `
+                <div class="popup-content">
+                    <h3>${item.name}</h3>
+                    <p>備註：${item.note}</p>
+                    <a href="${navLink}" target="_blank" class="nav-btn">🗺️ 開始導航</a>
+                </div>
+            `;
+
+            // 建立標記
+            const marker = L.marker([item.lat, item.lng], {icon: aedIcon})
+                .bindPopup(popupHtml)
+                .addTo(map);
+            
+            markers.push(marker);
+        });
+
+        // 預設將地圖縮放至包含所有標記的範圍
+        const group = new L.featureGroup(markers);
+        map.fitBounds(group.getBounds().pad(0.1));
+
+        // 控制按鈕功能：聚焦特定校區
+        function focusCampus(campusName) {
+            if (campusName === 'shipai') {
+                map.setView([25.1180, 121.5191], 17);
+            } else if (campusName === 'downtown') {
+                map.setView([25.0423, 121.5030], 18);
+            }
+        }
+
+        // 控制按鈕功能：顯示全部
+        function showAll() {
+            map.fitBounds(group.getBounds().pad(0.1));
+        }
+    </script>
+</body>
+</html>
