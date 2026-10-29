@@ -149,6 +149,11 @@ ol.chain-list span{color:var(--muted)}
 .recall>div{display:grid;gap:.4rem;align-content:start;min-width:0}
 .recall ul{margin:0;padding-left:1.1rem;font-size:.92rem;display:grid;gap:.25rem}
 @media (max-width:760px){.recall{grid-template-columns:1fr}}
+.proscons{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.proscons>div{display:grid;gap:.4rem;align-content:start;min-width:0}
+.proscons ul{margin:0;padding-left:1.1rem;font-size:.93rem;display:grid;gap:.25rem}
+@media (max-width:640px){.proscons{grid-template-columns:1fr}}
+ul.refs{margin:0;padding-left:1.1rem;font-size:.85rem;color:var(--muted);display:grid;gap:.2rem}
 </style>
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
 </head>
@@ -169,7 +174,7 @@ ol.chain-list span{color:var(--muted)}
 </div>
 
 <nav class="bar" aria-label="章節"><div class="wrap">
-  <a href="#position">定位</a><a href="#phases">三階段</a><a href="#modes">開站模式</a><a href="#org">組織與校內單位</a><a href="#mobilize">通報與召回</a><a href="#flow">四步流程</a><a href="#triage">分流</a><a href="#pcc">延長照護</a><a href="#partner">機構端</a><a href="#open">待決</a><a href="#changes">v1→v2</a>
+  <a href="#position">定位</a><a href="#phases">三階段</a><a href="#modes">開站模式</a><a href="#facility">場地確認</a><a href="#org">組織與校內單位</a><a href="#mobilize">通報與召回</a><a href="#flow">四步流程</a><a href="#triage">分流</a><a href="#pcc">延長照護</a><a href="#partner">機構端</a><a href="#peers">他校經驗</a><a href="#open">待決</a><a href="#changes">v1→v2</a>
 </div></nav>
 
 <main class="wrap">
@@ -264,6 +269,55 @@ ol.chain-list span{color:var(--muted)}
       <tr><td>收容上限</td><td>30 人，需床位者（臥床＋黃區）≤11</td><td>依衛生局指示；OSCE 教室容量於第一階段盤點</td></tr>
     </tbody>
   </table></div>
+</section>
+
+<section id="facility">
+  <header><span class="eyebrow">場地確認</span><h2>場地與設施：待確認與討論</h2><p class="note">以下依《國立臺北護理健康大學校園災害防救計畫》（114 年 1 月）的建築資料表整理。計畫裡沒有發電機、電梯緊急電源或停電處置的資料，需向總務處營繕組確認。</p></header>
+  <div class="tbl"><table>
+    <thead><tr><th>大樓</th><th>地上／地下</th><th>電梯</th><th>相關用途</th><th>對本計畫的意義</th></tr></thead>
+    <tbody>
+      <tr><td>科技大樓</td><td class="mono">4／1</td><td class="mono">1</td><td>健康中心、OSCE 臨床技能中心</td><td>健康中心與 OSCE 中心同棟：第三階段的入口檢傷、紅區、黃區可集中在這棟，動線短。但只有 1 部電梯，兩個單位各在幾樓待確認</td></tr>
+      <tr><td>親仁樓</td><td class="mono">7／1</td><td class="mono">2</td><td>教室、辦公室</td><td>可能是長照 7 樓教室所在。只有 7 層，電梯可能沒有緊急電源</td></tr>
+      <tr><td>學思樓</td><td class="mono">11／2</td><td class="mono">6</td><td>教室、辦公室</td><td>也可能是 7 樓教室所在。依建築技術規則，10 層以上要設緊急用昇降機並接緊急電源，這棟應該有，但實際供電範圍與時數待確認</td></tr>
+      <tr><td>長照大樓</td><td class="mono">4／1</td><td class="mono">0</td><td>教室、辦公室</td><td>沒有電梯，不是 7 樓教室所在，也不適合收臥床個案</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">資料表上這些大樓的地下層都登記為防空避難場所。</p>
+
+  <h3 class="sub">方案：以地下室停車場作為急救站或備援場地</h3>
+  <div class="proscons">
+    <div>
+      <h4>可能的優點</h4>
+      <ul>
+        <li>若有坡道直通地面，臥床與輪椅個案不必搭電梯，可以解決 7 樓與停電時電梯停用的問題</li>
+        <li>空間大、沒有隔間，可以平面劃出檢傷、紅、黃、綠區，動線清楚</li>
+        <li>已登記為防空避難場所，符合城鎮韌性演習的防空情境；屏東 2026 演習也演練了醫院的地下醫療核心區</li>
+        <li>不佔用教室，不必停課</li>
+      </ul>
+    </div>
+    <div>
+      <h4>主要風險</h4>
+      <ul>
+        <li>颱風與豪雨時可能淹水，水患情境不能用</li>
+        <li>停車場淨高通常偏低，救護車可能開不進去，只能在入口落客</li>
+        <li>照明、插座、通風都靠電力；停電時比地上空間更暗、更悶</li>
+        <li>汽機車廢氣、溫度與濕度；手機訊號差</li>
+        <li>沒有自來水、廁所、洗手台，感控較難</li>
+        <li>開站前要先清空車輛，需要時間與廣播</li>
+      </ul>
+    </div>
+  </div>
+  <p class="decision">初步建議：不取代健康中心與教室，列為「備援場地」，用於防空情境或第三階段大量收容；颱風與水患情境排除。要不要採用，取決於下方幾項實測結果。</p>
+
+  <h3 class="sub">請總務處營繕組確認</h3>
+  <ul class="check open">
+    <li>長照 7 樓教室在哪一棟？該棟電梯是否接緊急電源或發電機？</li>
+    <li>科技大樓電梯有沒有備援電力？健康中心、OSCE 中心各在幾樓？</li>
+    <li>全校發電機的位置、供電迴路（是否涵蓋健康中心、OSCE、7 樓教室、電梯）與可運轉時數</li>
+    <li>哪幾棟的地下室是停車場？出入口坡道位置、淨高、面積、淹水紀錄</li>
+    <li>地下停車場的緊急照明、插座、排風設備是否接緊急電源？手機訊號如何？</li>
+    <li>地下停車場附近的廁所與給水點，以及清空車輛需要多久</li>
+  </ul>
 </section>
 
 <section id="org">
@@ -430,6 +484,33 @@ ol.chain-list span{color:var(--muted)}
   </ul>
 </section>
 
+<section id="peers">
+  <header><span class="eyebrow">他校經驗</span><h2>國外大學的做法</h2><p class="note">分成兩類：大學替社區儲存災時物資，以及醫護院校在災時開設收容或醫療站。查到的多是大學與機構的報導，正式研究文獻不多。</p></header>
+  <div class="tbl"><table>
+    <thead><tr><th>學校</th><th>做了什麼</th><th>可借鏡之處</th></tr></thead>
+    <tbody>
+      <tr><td>UCSF</td><td>與舊金山衛生局簽 MOU，免費在校內倉庫存放加州的 2 套替代照護場所（Alternate Care Site）物資，每套 300 多項醫材，可支援 50 名病人 7–14 天，由衛生局統一調度</td><td>國北護可以向衛生局提出「代存急救站物資」，換取正式列冊</td></tr>
+      <tr><td>UC San Diego</td><td>校內設 13 個緊急物資貨櫃（食物、遮蔽、醫材），只由受訓的校園 CERT 志工開啟</td><td>開站箱封存、由受訓志工啟用的管理方式</td></tr>
+      <tr><td>LSU</td><td>2005 年卡崔娜颶風後，體育館 24 小時內改成野戰醫院，看診超過 6,000 人；醫師來自周邊醫院，師生志工做檢傷協助、後勤與陪伴</td><td>學校提供場地與志工，醫療指揮由外部醫療團隊負責，和本計畫的模式 B 一樣</td></tr>
+      <tr><td>UT Tyler</td><td>卡崔娜後在校內體育中心開設收容所，古斯塔夫颶風時被指定為「醫療特殊需求收容所」；護理學院主導，並開發線上即時訓練</td><td>護理學院長期經營特殊需求收容，和第二階段收長照住民最接近</td></tr>
+      <tr><td>ULM（路易斯安那大學門羅分校）</td><td>2008 年古斯塔夫颶風，護理教師全天候支援校內體育館的特殊需求收容所（近 300 位病人），並出借技能教室 20 多張病床</td><td>技能教室病床可以外借，與 OSCE 教室的角色類似</td></tr>
+      <tr><td>Western Carolina University</td><td>2024 年海倫颶風，護理學院在 16 天內派出 130 人（學生 93、教師 17、校友與志工 20），排滿 279 班中的 211 班，學生在教師督導下給藥、量生命徵象</td><td>最大問題是學生執業範圍、督導與法律責任不明，角色反覆變動；作者建議事先簽約、建立待命名冊與能力認證</td></tr>
+      <tr><td>熊本大學</td><td>2016 年熊本地震，約 1,000 位居民與學生到校避難，學校凌晨成立避難所運營本部；醫學部學生從 3 人擴大到約 200 人，做健康調查、血壓與服藥管理、急症轉附屬醫院，支援周邊 20 多處避難所</td><td>指揮與執行要分開、要排班；學生志工能補上正式支援的空窗</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">對本計畫的提醒：(1) 學生參與的法律與督導問題，最好在第一階段就寫進 MOU 與校內規範；(2) 代存衛生局物資，是讓學校進入正式體系的具體做法；(3) 待命名冊與能力認證，可以和宿舍召回名冊合併。</p>
+  <ul class="refs">
+    <li><a href="https://www.ucsf.edu/news/2012/09/104312/ucsf-agrees-store-part-states-cache-disaster-medical-supplies">UCSF Agrees to Store Part of State's Cache of Disaster Medical Supplies（2012）</a></li>
+    <li><a href="https://blink.ucsd.edu/safety/emergencies/preparedness/containers.html">UC San Diego Emergency Containers</a></li>
+    <li><a href="https://lsu.edu/blog/2025/08/katrina-response-research.php">Hurricane Katrina: LSU's Role in Response, Recovery, Resilience, and Research（2025）</a></li>
+    <li><a href="https://www.uttyler.edu/academics/colleges-schools/nursing/msns/about-us.php">UT Tyler Medical Needs Shelter</a></li>
+    <li><a href="https://www.ulm.edu/news/archives/2008/sept08/responds.html">ULM School of Nursing responds to Hurricane Gustav（2008）</a></li>
+    <li>Forcina J, Durbin T, Neligan K. From COVID-19 to Hurricane Helene: Rethinking the Role of Nursing Students in Crisis Response. N C Med J. 2025;86(1). <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13368010/">PMC</a></li>
+    <li><a href="https://www.kumamoto-u.ac.jp/daigakujouhou/kouhou/kouhoushi/kumatu/vol_61-file/kt61_all.pdf">熊本大學廣報誌 熊大通信 Vol.61（熊本地震特集）</a></li>
+    <li>Gibbs L, et al. Universities and multiple disaster scenarios: A transformative framework for disaster resilient universities. IJDRR. 2022;78:103132. <a href="https://researchonline.jcu.edu.au/82241">JCU</a></li>
+  </ul>
+</section>
+
 <section id="open">
   <header><span class="eyebrow">待決</span><h2>需要學校決定的事</h2><p class="note">以下都屬第一階段工作，決定後寫入 SOP。</p></header>
   <ul class="check open">
@@ -441,7 +522,7 @@ ol.chain-list span{color:var(--muted)}
     <li>保險：學生參與實際應變的保險類型與經費</li>
     <li>是否向臺北市衛生局登記為急救站候選場址，並爭取參與 2027 城鎮韌性演習</li>
     <li>電力：健康中心、長照模擬教室、OSCE 教室是否在備援電力迴路上，可撐幾小時</li>
-    <li>電梯：長照模擬教室在 7 樓，電梯是否接備援電力？停電或震後電梯停用時，7 樓只收能走樓梯者</li>
+    <li>場地與電力：7 樓教室的電梯、發電機供電範圍、地下室停車場是否作為備援場地（詳見「場地確認」）</li>
     <li>護理學院 OSCE 教室：間數、床數、電源與監視設備，以及第三階段借用程序</li>
     <li>震後場址安全：是否預先約定結構技師快速確認校園建物（參考舊金山 Building Occupancy Resumption Program 的預約制）</li>
   </ul>
