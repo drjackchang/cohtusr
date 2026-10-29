@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>國北護急救站個案卡</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&display=swap">
+<style>
+@page{size:A4;margin:10mm}
+*{box-sizing:border-box}
+body{margin:0;background:#e9eceb;color:#111;font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif;font-size:10.5pt;line-height:1.35}
+.sheet{width:210mm;min-height:297mm;margin:10mm auto;background:#fff;padding:10mm;display:flex;flex-direction:column;gap:3.5mm}
+@media print{body{background:#fff}.sheet{margin:0;width:auto;min-height:auto;padding:0;page-break-after:always}}
+.hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #0d6466;padding-bottom:2mm}
+.hd b{font-size:15pt}.hd span{font-size:8.5pt;color:#444}
+h2{margin:0;font-size:10.5pt;background:#0d6466;color:#fff;padding:1mm 2mm}
+.box{border:1px solid #666}
+.grid{display:grid;gap:0}
+.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:1fr 1fr}
+.f{border-right:1px solid #aaa;border-bottom:1px solid #aaa;padding:1mm 1.5mm;min-height:9mm}
+.f small{display:block;font-size:7.5pt;color:#555}
+.tri{display:flex;gap:3mm;padding:2mm;flex-wrap:wrap;align-items:center}
+.tri label{display:flex;align-items:center;gap:1.5mm;font-weight:700;padding:1mm 3mm;border:1.5px solid}
+.r{border-color:#b3261e;color:#b3261e}.y{border-color:#a45f00;color:#a45f00}.g{border-color:#2e6b34;color:#2e6b34}.v{border-color:#5b3f8f;color:#5b3f8f}
+.sq{width:3.5mm;height:3.5mm;border:1px solid #333;display:inline-block}
+.sbar{display:grid;grid-template-columns:8mm 1fr}
+.sbar .k{background:#e1efee;font-weight:700;font-size:13pt;display:grid;place-items:center;border-bottom:1px solid #aaa;border-right:1px solid #aaa}
+.sbar .v2{border-bottom:1px solid #aaa;padding:1mm 2mm;min-height:15mm}
+.sbar .v2 small{color:#555;font-size:7.5pt}
+table{border-collapse:collapse;width:100%;font-size:9pt}
+th,td{border:1px solid #888;padding:.8mm 1.2mm;height:6.3mm;text-align:center}
+th{background:#f0f3f2;font-weight:700;font-size:8pt}
+.ref{font-size:7.5pt;color:#333}
+.ref td,.ref th{height:auto;padding:.5mm 1mm}
+.c3{background:#fbe7e5}.c2{background:#fdf0d9}.c1{background:#fffbe6}
+.note{font-size:8pt;color:#444}
+.sign{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm;font-size:9pt;margin-top:auto}
+.sign div{border-top:1px solid #333;padding-top:1mm}
+</style></head><body>
+
+<!-- 正面 -->
+<div class="sheet">
+  <div class="hd"><div><b>個案卡｜正面：報到與交接</b><br><span>國立臺北護理健康大學 社區急救站 · v2</span></div><span>卡號 ____________　模式 □A 機構疏散　□B 衛生局急救站</span></div>
+
+  <div class="box grid g4">
+    <div class="f"><small>姓名（習慣稱呼）</small></div>
+    <div class="f"><small>出生年月日／性別</small></div>
+    <div class="f"><small>來源機構／檢傷卡號</small></div>
+    <div class="f"><small>到站時間</small></div>
+    <div class="f" style="grid-column:span 2"><small>過敏（藥物／食物）</small></div>
+    <div class="f" style="grid-column:span 2"><small>主要診斷</small></div>
+  </div>
+
+  <h2>分流（到站 NEWS2 = ____ 分）</h2>
+  <div class="box tri">
+    <label class="r"><span class="sq"></span>紅　不收，立即後送</label>
+    <label class="y"><span class="sq"></span>黃　收，每 1 小時監測</label>
+    <label class="g"><span class="sq"></span>綠　收，每 4 小時監測</label>
+    <label class="v"><span class="sq"></span>1:1 陪伴</label>
+    <span>區位／床號 ________</span>
+  </div>
+
+  <h2>SBAR 交接（機構人員口述，護生填寫）</h2>
+  <div class="box sbar">
+    <div class="k">S</div><div class="v2"><small>為什麼離開機構、現在最擔心什麼</small></div>
+    <div class="k">B</div><div class="v2"><small>重要病史、ADL：□全自理 □部分協助 □全協助　進食：□口食 □鼻胃管　如廁：□自行 □協助 □尿布　溝通限制：□聽損 □失語 □失智</small></div>
+    <div class="k">A</div><div class="v2"><small>出發前生命徵象、意識（AVPU）、疼痛、途中有無異常</small></div>
+    <div class="k">R</div><div class="v2"><small>翻身頻率、吞嚥／飲食限制、跌倒風險、宗教飲食、安撫方式與喜好</small></div>
+  </div>
+
+  <h2>用藥（依原機構醫囑）</h2>
+  <table><thead><tr><th style="width:34%">藥名</th><th>劑量</th><th>途徑</th><th>頻率</th><th>最後給藥時間</th><th>攜帶天數</th></tr></thead>
+  <tbody><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table>
+
+  <div class="box grid g3">
+    <div class="f"><small>隨身物品</small>□眼鏡 □助聽器 □假牙 □輔具 □其他______</div>
+    <div class="f"><small>機構隨行人員／電話</small></div>
+    <div class="f"><small>家屬聯絡（由機構負責通知）</small></div>
+  </div>
+
+  <div class="sign"><div>機構交接者</div><div>本站接收者</div><div>督導護理師</div></div>
+</div>
+
+<!-- 背面 -->
+<div class="sheet">
+  <div class="hd"><div><b>個案卡｜背面：留置監測與離站</b><br><span>姓名 ____________　卡號 ____________</span></div><span>任一項 3 分或總分 ≥5 → 督導護理師＋遠距醫師　總分 ≥7 → 立即後送</span></div>
+
+  <h2>NEWS2 監測</h2>
+  <table><thead><tr><th>日期／時間</th><th>呼吸</th><th>SpO₂</th><th>給氧</th><th>收縮壓</th><th>心跳</th><th>意識 AVPU／新混亂</th><th>體溫</th><th>NEWS2</th><th>處置</th><th>記錄者</th></tr></thead>
+  <tbody>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody></table>
+
+  <table class="ref"><thead><tr><th>NEWS2 計分</th><th>3</th><th>2</th><th>1</th><th>0</th><th>1</th><th>2</th><th>3</th></tr></thead><tbody>
+    <tr><td>呼吸 /min</td><td class="c3">≤8</td><td></td><td class="c1">9–11</td><td>12–20</td><td></td><td class="c2">21–24</td><td class="c3">≥25</td></tr>
+    <tr><td>SpO₂ %（量表 1）</td><td class="c3">≤91</td><td class="c2">92–93</td><td class="c1">94–95</td><td>≥96</td><td></td><td></td><td></td></tr>
+    <tr><td>給氧</td><td></td><td class="c2">有給氧</td><td></td><td>室內空氣</td><td></td><td></td><td></td></tr>
+    <tr><td>收縮壓 mmHg</td><td class="c3">≤90</td><td class="c2">91–100</td><td class="c1">101–110</td><td>111–219</td><td></td><td></td><td class="c3">≥220</td></tr>
+    <tr><td>心跳 /min</td><td class="c3">≤40</td><td></td><td class="c1">41–50</td><td>51–90</td><td class="c1">91–110</td><td class="c2">111–130</td><td class="c3">≥131</td></tr>
+    <tr><td>意識</td><td></td><td></td><td></td><td>A 清醒</td><td></td><td></td><td class="c3">新混亂／V／P／U</td></tr>
+    <tr><td>體溫 °C</td><td class="c3">≤35.0</td><td></td><td class="c1">35.1–36.0</td><td>36.1–38.0</td><td class="c1">38.1–39.0</td><td class="c2">≥39.1</td><td></td></tr>
+  </tbody></table>
+  <p class="note">需持續給氧者原則上不收；若暫時給氧中，給氧欄計 2 分並通報督導護理師。已知慢性高碳酸血症個案依醫師指示改用 SpO₂ 量表 2。</p>
+
+  <h2>照護紀錄（每格填時間與簽名）</h2>
+  <table><thead><tr><th style="width:18%">項目</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead><tbody>
+    <tr><td>翻身（每 2 小時）</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>如廁／換尿布</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>飲水 mL／進食 %</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>給藥（附給藥紀錄）</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>疼痛 NRS／PAINAD</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    <tr><td>情緒／譫妄徵象</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody></table>
+
+  <h2>離站</h2>
+  <div class="box grid g3">
+    <div class="f"><small>去向</small>□後送醫院______ □返回機構 □替代安置______</div>
+    <div class="f"><small>返回機構三條件</small>□機構經主管機關確認安全 □穩定 24 小時 □本人／家屬同意</div>
+    <div class="f"><small>離站時間／接手者</small></div>
+  </div>
+  <div class="sign"><div>照護護生</div><div>督導護理師</div><div>站長確認</div></div>
+</div>
+
+<!-- 站況日誌 -->
+<div class="sheet">
+  <div class="hd"><div><b>站況日誌</b><br><span>事件 ____________　模式 □A □B　請求者 ____________　站長 ____________</span></div><span>受理 ___:___　召回訊息 ___:___　校門開放 ___:___（___門）<br>就緒 ___:___　撤站 ___:___</span></div>
+  <h2>人數（每次變動或每 2 小時）</h2>
+  <table><thead><tr><th>時間</th><th>紅（轉出）</th><th>黃</th><th>綠</th><th>1:1</th><th>站內合計</th><th>NEWS2 最高者卡號／分數</th><th>回報請求者</th><th>記錄者</th></tr></thead><tbody>
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+  </tbody></table>
+  <h2>決策與事件</h2>
+  <table><thead><tr><th style="width:12%">時間</th><th style="width:16%">類型</th><th>內容</th><th style="width:14%">決定者</th></tr></thead><tbody>
+  <tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr><tr><td></td><td></td><td></td><td></td></tr>
+  </tbody></table>
+  <p class="note">類型：開站／動員等級／收容／後送／遠距諮詢／物資／換班／安全巡查／對外聯繫／撤站</p>
+  <h2>組長到位</h2>
+  <div class="box grid g4"><div class="f"><small>照護組長／時間</small></div><div class="f"><small>後勤組長／時間</small></div><div class="f"><small>紀錄聯絡組長／時間</small></div><div class="f"><small>副站長／時間</small></div><div class="f"><small>大門警衛確認／時間</small></div><div class="f"><small>總務值班（電力）／時間</small></div><div class="f"><small>宿舍召回人數／到站時間</small></div><div class="f"><small>撤站離站點名完成／時間</small></div></div>
+  <div class="sign"><div>站長</div><div>紀錄聯絡組長</div><div>事後檢討日期</div></div>
+</div>
+</body></html>

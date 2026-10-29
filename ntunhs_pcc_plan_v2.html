@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>國北護社區急救站</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;800&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: single reading column (~60rem) with a sticky section bar; process steps on a left time rail; tables scroll in their own boxes. */
+:root{
+  --bg:#f4f6f5; --surface:#ffffff; --ink:#15262b; --muted:#56666b; --line:#d6dedc;
+  --accent:#0d6466; --accent-soft:#e1efee;
+  --red:#b3261e; --red-soft:#fbe7e5; --amber:#a45f00; --amber-soft:#fdf0d9; --green:#2e6b34; --green-soft:#e5f1e4; --violet:#5b3f8f; --violet-soft:#eee8f7;
+  --f-display:"Noto Serif TC","Songti TC","PMingLiU",serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0f1719; --surface:#162226; --ink:#e3ecea; --muted:#9db0b3; --line:#2b3b3f;
+  --accent:#5cc2bf; --accent-soft:#163a3b;
+  --red:#ff8a80; --red-soft:#3d1a18; --amber:#f2b552; --amber-soft:#3a2a10; --green:#86c98c; --green-soft:#1b3320; --violet:#c2a8f0; --violet-soft:#2a2140;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1719; --surface:#162226; --ink:#e3ecea; --muted:#9db0b3; --line:#2b3b3f;
+  --accent:#5cc2bf; --accent-soft:#163a3b;
+  --red:#ff8a80; --red-soft:#3d1a18; --amber:#f2b552; --amber-soft:#3a2a10; --green:#86c98c; --green-soft:#1b3320; --violet:#c2a8f0; --violet-soft:#2a2140;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:60rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.3;margin:0}
+h1{font-size:clamp(2rem,6vw,3.1rem);font-weight:800;letter-spacing:.02em}
+h2{font-size:1.6rem;font-weight:800}
+h3{font-size:1.12rem;font-weight:600}
+p{margin:0;max-width:65ch}
+.eyebrow{font-family:var(--f-mono);font-size:.78rem;letter-spacing:.08em;color:var(--accent);text-transform:uppercase}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{padding-block:3rem 2rem;display:grid;gap:1.1rem}
+.lede{font-size:1.08rem;color:var(--muted)}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-top:.6rem}
+.facts div{padding:.9rem 1rem .9rem 0;display:grid;gap:.15rem}
+.facts div+div{padding-left:1rem;border-left:1px solid var(--line)}
+.facts dt{font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+.facts dd{margin:0;font-weight:700;font-size:1.05rem}
+@media (max-width:640px){.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3){padding-left:0;border-left:0}.facts div:nth-child(n+3){border-top:1px solid var(--line)}}
+
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;gap:.25rem;overflow-x:auto;padding-block:.5rem;scrollbar-width:none}
+nav.bar a{flex:none;text-decoration:none;color:var(--muted);font-size:.9rem;padding:.3rem .7rem;border-radius:999px}
+nav.bar a:hover{background:var(--accent-soft);color:var(--accent)}
+
+section{padding-block:2.8rem 0;display:grid;gap:1.1rem;scroll-margin-top:4rem}
+section>header{display:grid;gap:.35rem}
+.note{font-size:.92rem;color:var(--muted)}
+
+/* chain */
+.chain{display:grid;grid-template-columns:1fr auto 1.3fr auto 1fr;align-items:stretch;gap:.5rem}
+.node{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem;display:grid;gap:.3rem;align-content:start;min-width:0}
+.node.us{border:2px solid var(--accent);background:var(--accent-soft)}
+.node small{color:var(--muted);font-size:.85rem;line-height:1.55}
+.node .tag{font-family:var(--f-mono);font-size:.72rem;color:var(--accent);letter-spacing:.06em}
+.arrow{align-self:center;color:var(--muted);font-family:var(--f-mono)}
+.borp{margin-top:.5rem;border-top:1px dashed var(--line);padding-top:.5rem;font-size:.85rem;color:var(--violet)}
+@media (max-width:760px){.chain{grid-template-columns:1fr}.arrow{justify-self:center;transform:rotate(90deg)}}
+
+.terms{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.terms div{display:grid;gap:.3rem;align-content:start}
+.terms b{font-family:var(--f-display);font-size:1.05rem}
+.terms span{font-size:.92rem;color:var(--muted)}
+@media (max-width:760px){.terms{grid-template-columns:1fr}}
+.warn{background:var(--amber-soft);border-radius:8px;padding:.9rem 1rem;font-size:.95rem}
+.warn b{color:var(--amber)}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:34rem;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:.65rem .85rem;border-bottom:1px solid var(--line)}
+th{font-size:.8rem;color:var(--muted);font-weight:500;letter-spacing:.04em;background:var(--bg)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+
+/* steps */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;gap:0}
+ol.steps>li{display:grid;grid-template-columns:3.2rem 1fr;gap:1rem;position:relative;padding-bottom:1.6rem}
+ol.steps>li::before{content:"";position:absolute;left:1.55rem;top:3rem;bottom:0;width:2px;background:var(--line)}
+ol.steps>li:last-child::before{display:none}
+.num{width:3.2rem;height:3.2rem;border-radius:50%;background:var(--accent);color:var(--surface);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:1.3rem}
+.step{display:grid;gap:.6rem;min-width:0}
+.step .time{font-family:var(--f-mono);font-size:.8rem;color:var(--accent)}
+.kv{display:grid;grid-template-columns:5.5rem 1fr;gap:.35rem 1rem;font-size:.94rem}
+.kv dt{color:var(--muted);font-size:.85rem;padding-top:.1rem}
+.kv dd{margin:0;min-width:0}
+.decision{border-left:3px solid var(--accent);padding:.2rem 0 .2rem .8rem;font-size:.94rem}
+@media (max-width:520px){ol.steps>li{grid-template-columns:2.4rem 1fr;gap:.7rem}.num{width:2.4rem;height:2.4rem;font-size:1.05rem}ol.steps>li::before{left:1.15rem;top:2.4rem}.kv{grid-template-columns:1fr}.kv dt{padding-top:.4rem}}
+
+.chip{display:inline-block;font-size:.8rem;font-weight:700;padding:.1rem .55rem;border-radius:999px;white-space:nowrap}
+.c-red{background:var(--red-soft);color:var(--red)}
+.c-amber{background:var(--amber-soft);color:var(--amber)}
+.c-green{background:var(--green-soft);color:var(--green)}
+.c-violet{background:var(--violet-soft);color:var(--violet)}
+.c-teal{background:var(--accent-soft);color:var(--accent)}
+.c-gray{background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+
+.roles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.role{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;display:grid;gap:.4rem;align-content:start}
+.role p{font-size:.92rem;color:var(--muted)}
+.role ul{margin:0;padding-left:1.1rem;font-size:.92rem}
+@media (max-width:640px){.roles{grid-template-columns:1fr}}
+
+.phases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+.phase{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.1rem;display:grid;gap:.55rem;align-content:start;min-width:0}
+.phase:nth-child(2){border-color:var(--accent)}
+.ph-top{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;flex-wrap:wrap}
+.ph-num{font-family:var(--f-display);font-weight:800;color:var(--accent)}
+.ph-time{font-size:.75rem;color:var(--muted)}
+.phase>p{font-size:.92rem;color:var(--muted)}
+.ph-kv{margin:0;display:grid;gap:.25rem;font-size:.9rem}
+.ph-kv dt{font-size:.78rem;color:var(--accent);letter-spacing:.04em;margin-top:.45rem;font-weight:700}
+.ph-kv dd{margin:0}
+.ph-kv ul{margin:0;padding-left:1.05rem;display:grid;gap:.15rem}
+@media (max-width:860px){.phases{grid-template-columns:1fr}}
+ul.check{list-style:none;margin:0;padding:0;display:grid;gap:.45rem;font-size:.95rem}
+ul.check li{display:grid;grid-template-columns:1.3rem 1fr;gap:.4rem}
+ul.check li::before{content:"□";color:var(--accent);font-family:var(--f-mono)}
+ul.open li::before{content:"?";font-weight:700}
+
+footer{margin-top:3.5rem;padding-block:1.6rem 3rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted);display:grid;gap:.5rem}
+footer ul{margin:0;padding-left:1.1rem}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+
+h3.sub{margin-top:1.2rem}
+h4{margin:0;font-size:.95rem;font-family:var(--f-display)}
+.units td small{font-weight:400;color:var(--muted);font-size:.78rem}
+.units{min-width:46rem}
+ol.chain-list{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;counter-reset:c;border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+ol.chain-list li{counter-increment:c;padding:1rem;display:grid;gap:.3rem;align-content:start;min-width:0;font-size:.92rem}
+ol.chain-list li+li{border-left:1px solid var(--line)}
+ol.chain-list b::before{content:counter(c) "　";font-family:var(--f-mono);color:var(--accent)}
+ol.chain-list span{color:var(--muted)}
+@media (max-width:760px){ol.chain-list{grid-template-columns:1fr}ol.chain-list li+li{border-left:0;border-top:1px solid var(--line)}}
+.recall{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2rem}
+.recall>div{display:grid;gap:.4rem;align-content:start;min-width:0}
+.recall ul{margin:0;padding-left:1.1rem;font-size:.92rem;display:grid;gap:.25rem}
+@media (max-width:760px){.recall{grid-template-columns:1fr}}
+</style>
+<style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="top">
+  <span class="eyebrow">USR 紮根校園，共築韌性 · 計畫 v2 草案 · 2026-10</span>
+  <h1>國北護社區急救站</h1>
+  <p class="lede">國北護以急救站與 PCC（Prolonged Casualty Care，延長傷患照護）為核心，分三階段推進：先連結衛生局、合作醫院與長照機構並完成規劃，再以健康中心與長照模擬教室建置演練，最後擴大到護理學院 OSCE 教室，收治長照住民以外的一般傷患。急救站納入學校既有的校園災害應變體系，由校安中心受理通報，總務、學務、人事等單位分工支援。</p>
+  <dl class="facts">
+    <div><dt>推進方式</dt><dd>連結規劃 → 建置演練 → 擴大收治</dd></div>
+    <div><dt>第二階段上限</dt><dd class="mono">30 人（臥床 ≤12）</dd></div>
+    <div><dt>就緒目標</dt><dd>上班 30 分／夜間待演練驗證</dd></div>
+    <div><dt>單一受理窗口</dt><dd>校安中心 24 小時專線</dd></div>
+  </dl>
+</header>
+</div>
+
+<nav class="bar" aria-label="章節"><div class="wrap">
+  <a href="#position">定位</a><a href="#phases">三階段</a><a href="#modes">開站模式</a><a href="#org">組織與校內單位</a><a href="#mobilize">通報與召回</a><a href="#flow">四步流程</a><a href="#triage">分流</a><a href="#pcc">延長照護</a><a href="#partner">機構端</a><a href="#open">待決</a><a href="#changes">v1→v2</a>
+</div></nav>
+
+<main class="wrap">
+
+<section id="position">
+  <header><span class="eyebrow">定位</span><h2>國北護在韌性醫療鏈上的位置</h2></header>
+  <div class="chain">
+    <div class="node"><span class="tag">來源</span><h3>長照機構／災害現場</h3><small>機構自行疏散；現場傷患由 119 檢傷。紅色傷患原則上直接送醫院，不經本站。</small></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node us"><span class="tag">國北護</span><h3>社區急救站＋延長照護</h3><small>報到分流、監測、護理照護、後送準備。後送受阻時，能讓穩定個案留置 24 小時以上。</small>
+      <div class="borp">若衛生局把 BORP 備援手術團隊部署到校園，學校負責場地、電、水、照明與車輛動線。</div></div>
+    <div class="arrow" aria-hidden="true">→</div>
+    <div class="node"><span class="tag">去向</span><h3>醫院／返回機構</h3><small>惡化者後送急診或 BORP 據點；穩定者等原機構確認安全後返回，或轉替代安置。</small></div>
+  </div>
+  <div class="terms">
+    <div><b>急救站</b><span>衛生局或衛生所下令，在學校、衛生所等場所開設的臨時醫療點，做檢傷、簡易診療、觀察與後送評估。2026 城鎮韌性演習在新北、屏東都有學校開站。</span></div>
+    <div><b>PCC 延長傷患照護</b><span>Prolonged Casualty Care。後送受阻、資源受限時在現場持續照護。三要素是遠距醫療、醫療照護、後送準備。</span></div>
+    <div><b>BORP 備援手術室</b><span>Backup Operation Room Project。台灣外科醫學會提出、衛福部推動，把損傷控制手術帶到現場，常與急救站共構。</span></div>
+  </div>
+  <p class="warn"><b>名詞定義：</b>本計畫的 PCC 一律指 Prolonged Casualty Care（延長傷患照護），與衛生局、台灣外科醫學會、重症醫學會的用法一致。v1 使用的 Person-Centered Care 不再用縮寫，改稱「以人為本照護原則」，列為留置照護的照護原則。</p>
+</section>
+
+<section id="phases">
+  <header><span class="eyebrow">推進路線</span><h2>三個階段</h2><p class="note">時程為建議，依 115 學年度學期安排。每個階段達成「完成指標」後，才進入下一階段。</p></header>
+  <div class="phases">
+    <article class="phase">
+      <div class="ph-top"><span class="ph-num">第一階段</span><span class="ph-time mono">115-1 · 2026/11–2027/01</span></div>
+      <h3>連結與規劃</h3>
+      <p>建立對外關係、校內授權與分工，SOP 定稿。這個階段不收治。</p>
+      <dl class="ph-kv">
+        <dt>對外連結</dt><dd><ul>
+          <li>臺北市衛生局／北投區健康服務中心：登記為急救站候選場址，取得急救站開設指引</li>
+          <li>合作醫院（優先 BORP 種子醫院）：遠距醫療諮詢、常規醫囑、後送窗口</li>
+          <li>1–2 家周邊長照機構：簽 MOU，約定校安中心專線為單一受理窗口</li>
+          <li>民間救護車與復康巴士：臥床轉送管道</li></ul></dd>
+        <dt>校內規劃</dt><dd><ul>
+          <li>將急救站列入學校校園災害防救計畫的任務編組，送校級核定</li>
+          <li>指定站長、副站長與四組組長</li>
+          <li>與校安中心、總務處、學務處、人事室等單位確認分工（見「組織與校內單位」）</li>
+          <li>SOP 定稿、場地平面圖與車輛動線圖、電力盤點、學生保險、個資規範</li>
+          <li>建立應變志工名冊與通報樹，含宿舍召回名單</li></ul></dd>
+        <dt>完成指標</dt><dd>MOU ≥1 份、合作醫院協議 1 份、SOP 與校內分工核定、桌上演練 1 次</dd>
+      </dl>
+    </article>
+    <article class="phase">
+      <div class="ph-top"><span class="ph-num">第二階段</span><span class="ph-time mono">115-2 · 2027/02–07</span></div>
+      <h3>建置演練</h3>
+      <p>使用健康中心與長照模擬教室，開站模式 A，收治長照機構疏散住民。</p>
+      <dl class="ph-kv">
+        <dt>場地</dt><dd>健康中心：黃區，病床 4–6 床。長照模擬教室 A／B 區：綠區與失智友善區，教學床 8–10 床。上限 30 人，臥床 ≤12</dd>
+        <dt>建置</dt><dd><ul>
+          <li>開站箱封存，每學期盤點</li>
+          <li>大門開放與救護車落客點試行</li>
+          <li>種子人力訓練：NEWS2、SBAR、個案卡、以人為本照護原則、BLS</li></ul></dd>
+        <dt>演練</dt><dd>桌上演練 → 開站計時功能演練，上班時段、夜間宿舍召回各 1 次 → 與 MOU 機構實地演練，含 24 小時留置模擬</dd>
+        <dt>完成指標</dt><dd>上班時段 30 分鐘就緒經驗證、夜間召回到位時間實測、個案卡完整率、事後檢討報告</dd>
+      </dl>
+    </article>
+    <article class="phase">
+      <div class="ph-top"><span class="ph-num">第三階段</span><span class="ph-time mono">116 學年起 · 2027/08–</span></div>
+      <h3>擴大收治</h3>
+      <p>加入護理學院 OSCE 教室，開站模式 B：由衛生局指定為急救站，收治長照住民以外的一般傷患。</p>
+      <dl class="ph-kv">
+        <dt>場地分工</dt><dd><ul>
+          <li>健康中心：入口檢傷，紅色個案短暫穩定、等候後送</li>
+          <li>護理學院 OSCE 教室：黃區處置與觀察床位</li>
+          <li>長照模擬教室：綠區與長照住民區</li></ul></dd>
+        <dt>擴充能力</dt><dd><ul>
+          <li>入口 START 檢傷，與衛生局檢傷卡銜接</li>
+          <li>MARCH 止血、傷口處置、骨折固定</li>
+          <li>PCC 留置 24 小時以上，遠距醫療常態化</li>
+          <li>BORP 部署到校園時的場地介面</li></ul></dd>
+        <dt>演練</dt><dd>參加臺北市城鎮韌性演習的急救站開設；與合作醫院 BORP 團隊聯合演練；OSCE 教室同時作為教學站</dd>
+        <dt>完成指標</dt><dd>衛生局正式列冊、參與城鎮韌性演習 1 次、大量傷患功能演練 1 次</dd>
+      </dl>
+    </article>
+  </div>
+</section>
+
+<section id="modes">
+  <header><span class="eyebrow">開站模式</span><h2>兩種請求，同一套流程</h2><p class="note">模式 A 在第二階段建置，模式 B 在第三階段加入。學校端只有一個開站條件：校安中心接到 MOU 機構或衛生局的正式請求。機構何時該求援（停電 4 小時、建物撤離等）寫在 MOU 乙方義務裡。</p></header>
+  <div class="tbl"><table>
+    <thead><tr><th></th><th>模式 A　長照機構疏散接收（第二階段起）</th><th>模式 B　衛生局指定急救站（第三階段起）</th></tr></thead>
+    <tbody>
+      <tr><td>請求者</td><td>MOU 簽約長照機構</td><td>臺北市衛生局／北投區健康服務中心</td></tr>
+      <tr><td>站長</td><td>國北護（護理系或長照系主任）</td><td>衛生單位指派。衛生單位人員到場前由國北護站長代理，到場後移交，國北護改任副站長兼場地負責人</td></tr>
+      <tr><td>對象</td><td>已知住民名單，慢性病穩定、行動受限為主</td><td>未知傷病患，輕中傷為主</td></tr>
+      <tr><td>檢傷</td><td>機構端初檢＋到站 NEWS2</td><td>入口 START＋衛生局檢傷卡，到站後 NEWS2</td></tr>
+      <tr><td>照護責任</td><td>機構隨行人員為主，國北護支援</td><td>衛生局醫療團隊為主，國北護提供護理人力</td></tr>
+      <tr><td>家屬聯繫</td><td>機構負責；國北護定時回報站況給機構</td><td>依衛生局規定</td></tr>
+      <tr><td>使用空間</td><td>健康中心＋長照模擬教室</td><td>再加護理學院 OSCE 教室</td></tr>
+      <tr><td>收容上限</td><td>30 人，臥床 ≤12</td><td>依衛生局指示；OSCE 教室容量於第一階段盤點</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="org">
+  <header><span class="eyebrow">組織</span><h2>站內四組，校內單位支援</h2><p class="note">急救站是學校校園災害應變體系下的一個任務編組。站長向校級應變小組召集人（校長或其授權人）報告；需要跨處室資源時，由站長提出、校級應變小組調度。</p></header>
+  <div class="roles">
+    <div class="role"><h3>站長</h3><p>護理系或長照系主任。副站長由資深教師擔任，站長 15 分鐘內聯絡不上即全權接任。</p><ul><li>決定動員等級、收容上限、停止收容</li><li>對外單一窗口，向校級應變小組報告</li><li>兼安全官，每 2 小時巡查動線、出口、防跌、感控</li><li>協調人事室、教務處、學務處、主計室</li></ul></div>
+    <div class="role"><h3>照護組</h3><p>有照護理師擔任組長。</p><ul><li>接收小組：報到分流</li><li>床邊照護：有照護生 1:3、未照護生 1:5，在有照護理師督導下執行</li><li>陪伴：長照系學生負責 1:1 個案</li></ul></div>
+    <div class="role"><h3>後勤組</h3><p>行政人員擔任組長，對接總務處與環安單位。</p><ul><li>空間佈置、開站箱、物資補充</li><li>大門與車輛動線、電力、照明、飲水、餐食</li><li>廁所清潔、感染性廢棄物暫存</li></ul></div>
+    <div class="role"><h3>紀錄聯絡組</h3><p>教師或資深護生擔任組長，對接校安中心與秘書室。</p><ul><li>站況板：人數、分流顏色、NEWS2 最高者</li><li>站況日誌、志工報到與離站登記</li><li>定時回報請求者；不直接聯絡家屬</li></ul></div>
+  </div>
+
+  <h3 class="sub">校內單位分工</h3>
+  <p class="note">單位名稱依本校組織調整。「平時」為第一、二階段要完成的準備，「開站時」為實際啟動後的任務。</p>
+  <div class="tbl"><table class="units">
+    <thead><tr><th>單位</th><th>平時準備</th><th>開站時任務</th><th>對接</th></tr></thead>
+    <tbody>
+      <tr><td>校安中心<br><small>24 小時值勤</small></td><td>列為 MOU 機構與衛生局的單一受理專線；保管通報樹與聯絡名冊，每學期更新</td><td>受理請求並記錄人數組成 → 依通報樹聯絡站長 → 發送動員訊息（電話、簡訊、群組）→ 通知大門、總務值班、宿舍；依規定辦理校安通報</td><td>紀錄聯絡組</td></tr>
+      <tr><td>總務處・駐衛警／大門</td><td>規劃救護車、消防車進出動線與落客點；指定開放校門與夜間開門權限；車輛暫停區</td><td>開放指定校門、管制一般車輛、引導救護車到健康中心落客點；人員與車輛進出登記；必要時協助周邊交通</td><td>後勤組</td></tr>
+      <tr><td>總務處・營繕事務</td><td>確認健康中心、長照模擬教室、OSCE 教室的備援電力與可撐時數；校車與司機聯絡方式</td><td>維持電力、照明、空調、給水；調度校車（A 組步行住民接駁）；臨時場地開門</td><td>後勤組</td></tr>
+      <tr><td>環安單位</td><td>感染性廢棄物暫存點與清運合約；場地安全檢查</td><td>協助安全巡查；廢棄物分類、暫存與清運</td><td>後勤組／站長</td></tr>
+      <tr><td>學務處・住宿組與宿舍</td><td>宿舍應變志工名冊、舍監召回流程、宿舍集合點；學生志工保險</td><td>舍監依校安中心訊息啟動宿舍召回，清點志工後帶往健康中心（見「通報與召回」）</td><td>站長／紀錄聯絡組</td></tr>
+      <tr><td>學務處・衛保組（健康中心）</td><td>開站箱與醫材盤點；健康中心護理師排班</td><td>第一線開站，提供病床區與監測設備</td><td>照護組</td></tr>
+      <tr><td>人事室</td><td>教職員應變任務編組名冊；公差假、加班補休規定</td><td>核給動員教職員公差，出勤紀錄作為補休依據</td><td>站長</td></tr>
+      <tr><td>教務處</td><td>課堂抽調學生的授權方式與補課規定</td><td>二級以上動員時，依站長請求停課、調課或抽調學生</td><td>站長</td></tr>
+      <tr><td>護理學院</td><td>OSCE 教室盤點：間數、床數、電源、監視設備；借用程序</td><td>第三階段開放 OSCE 教室作為黃區</td><td>站長／後勤組</td></tr>
+      <tr><td>護理系、長照系</td><td>種子教師與有照護生名冊；訓練與演練</td><td>提供照護組主要人力</td><td>照護組</td></tr>
+      <tr><td>秘書室</td><td>對外發言原則</td><td>媒體詢問、校門口家屬與民眾詢問的接待</td><td>站長</td></tr>
+      <tr><td>電算中心</td><td>校園簡訊、廣播、網路備援</td><td>維持通訊；需要時協助發送校園訊息</td><td>紀錄聯絡組</td></tr>
+      <tr><td>主計室</td><td>消耗品預算、MOU 費用結算方式</td><td>緊急採購與代墊核銷</td><td>站長</td></tr>
+      <tr><td>餐廳、福利社</td><td>緊急供餐聯絡人與軟質食物供應</td><td>提供個案與工作人員餐食、飲水</td><td>後勤組</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="mobilize">
+  <header><span class="eyebrow">通報與動員</span><h2>從一通電話到人員就位</h2><p class="note">所有請求都打同一支校安中心專線，由校安中心啟動通報樹，避免機構或衛生局各自打給不同老師。</p></header>
+
+  <ol class="chain-list">
+    <li><b>受理</b><span>校安中心接電話，記下請求者、事件類型、人數（臥床／輪椅／步行）、預計到達時間、回撥電話。</span></li>
+    <li><b>決定</b><span>校安中心聯絡站長（15 分鐘聯絡不上改聯絡副站長）。站長宣布動員等級。</span></li>
+    <li><b>發送</b><span>校安中心同時通知：四組組長、大門警衛（開門）、總務值班（電力）、宿舍舍監（夜間召回）、校級應變小組召集人。</span></li>
+    <li><b>就位</b><span>各組長回報到位時間，紀錄聯絡組登記到站人員。站長回覆請求者：「可收幾人、幾點就緒」。</span></li>
+  </ol>
+
+  <h3 class="sub">動員等級</h3>
+  <div class="tbl"><table>
+    <thead><tr><th>等級</th><th>人數</th><th>使用空間</th><th>上班時段人力</th><th>夜間／假日人力</th></tr></thead>
+    <tbody>
+      <tr><td>一級</td><td class="mono">1–5</td><td>健康中心</td><td>健康中心護理師＋護生 2</td><td>值班教師＋宿舍召回護生 2</td></tr>
+      <tr><td>二級</td><td class="mono">6–15</td><td>健康中心＋長照模擬教室 A 區</td><td>護理師＋有照護生 ≥4＋教師督導</td><td>宿舍召回＋鄰近教職員，待演練驗證</td></tr>
+      <tr><td>三級</td><td class="mono">16–30</td><td>健康中心＋長照模擬教室 A／B 區</td><td>全面動員，教務處授權課堂抽調</td><td>待演練驗證</td></tr>
+      <tr><td>擴大</td><td class="mono">依衛生局</td><td>再加護理學院 OSCE 教室（第三階段）</td><td>全面動員＋衛生局醫療團隊</td><td>待第三階段演練驗證</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 class="sub">宿舍師生召回機制</h3>
+  <div class="recall">
+    <div>
+      <h4>誰會被召回</h4>
+      <ul><li>只召回事先登錄在應變志工名冊、完成訓練、有保險的學生，例如有照護生、長照系學生、到院前緊急救護社社員</li>
+      <li>住在學校附近、能在 30 分鐘內到校的教職員，另列名冊</li>
+      <li>召回採自願，不得強制，也不影響成績</li></ul>
+    </div>
+    <div>
+      <h4>怎麼召回</h4>
+      <ul><li>校安中心通知舍監，舍監在宿舍群組發召回訊息並廣播</li>
+      <li>志工到宿舍指定集合點報到，舍監點名，回報校安中心人數</li>
+      <li>由一名組長或教師帶隊到健康中心，向紀錄聯絡組報到</li></ul>
+    </div>
+    <div>
+      <h4>安全與輪替</h4>
+      <ul><li>災害若也影響校園（如地震），先確認宿舍與志工本身安全，再決定是否召回</li>
+      <li>每人連續工作不超過 8 小時，換班前完成交接</li>
+      <li>離站時登記，舍監確認所有召回者已返回宿舍</li></ul>
+    </div>
+  </div>
+</section>
+
+<section id="flow">
+  <header><span class="eyebrow">流程</span><h2>開站後的四個步驟</h2><p class="note">疏散與轉送由長照機構、119 與民間救護車負責，不列為學校步驟。</p></header>
+  <ol class="steps">
+    <li><span class="num">1</span><div class="step">
+      <span class="time">T+0 → 就緒（上班時段目標 30 分）</span><h3>開站</h3>
+      <dl class="kv">
+        <dt>誰</dt><dd>站長、四組組長、校安中心、大門、總務值班</dd>
+        <dt>做什麼</dt><dd>依「通報與動員」叫人 → 大門開放並指定落客點 → 照護組備床與監測設備 → 後勤組佈置空間、確認電力 → 紀錄聯絡組備好個案卡與站況板 → 站長巡一次安全</dd>
+        <dt>表單</dt><dd>站況日誌</dd>
+      </dl>
+      <p class="decision">站長回覆請求者：「可收 <span class="mono">__</span> 人，其中臥床 <span class="mono">__</span> 床，<span class="mono">__:__</span> 就緒，請從 <span class="mono">__</span> 門進入。」</p>
+    </div></li>
+    <li><span class="num">2</span><div class="step">
+      <span class="time">每位個案約 5 分鐘</span><h3>報到分流</h3>
+      <dl class="kv">
+        <dt>誰</dt><dd>照護組接收小組（有照護理師＋2 名護生）、機構隨行人員</dd>
+        <dt>做什麼</dt><dd>在落客點核對名單與身分 → 戴腕帶 → 機構人員以 SBAR 口頭交接，護生同步填個案卡正面 → 量一次生命徵象、算 NEWS2 → 分流上色、分配區位</dd>
+        <dt>表單</dt><dd>個案卡（正面）</dd>
+      </dl>
+      <p class="decision">紅：不收，立即後送（第三階段在健康中心短暫穩定）。黃、綠：收。另標 1:1（失智、譫妄風險）。</p>
+    </div></li>
+    <li><span class="num">3</span><div class="step">
+      <span class="time">數小時到數天</span><h3>留置照護</h3>
+      <dl class="kv">
+        <dt>誰</dt><dd>照護組（8 小時一班）、陪伴的長照系學生、遠距醫師</dd>
+        <dt>做什麼</dt><dd>綠每 4 小時、黃每 1 小時量 NEWS2 → 翻身每 2 小時、水分與如廁、給藥依原機構醫囑 → 以人為本照護原則（稱呼個案習慣的名字、隱私、陪伴、日夜節律）→ 每 4–6 小時向請求者回報站況</dd>
+        <dt>表單</dt><dd>個案卡（背面）、給藥紀錄（本站實際給藥才用）</dd>
+      </dl>
+      <p class="decision">NEWS2 任一單項 3 分或總分 ≥5：督導護理師評估＋遠距醫師諮詢。總分 ≥7：立即後送，通知大門放行救護車。</p>
+    </div></li>
+    <li><span class="num">4</span><div class="step">
+      <span class="time">逐一離站 → 撤站</span><h3>離站與撤站</h3>
+      <dl class="kv">
+        <dt>誰</dt><dd>站長決定、紀錄聯絡組登記、機構或衛生局接手、後勤組與環安單位撤場</dd>
+        <dt>做什麼</dt><dd>後送醫院（附個案卡影本）／返回機構（三條件：機構經主管機關確認安全、個案穩定 24 小時、本人或家屬同意）／轉替代安置 → 最後一位離站後撤站：工作人員離站點名、宿舍確認召回者返回、廢棄物清運、物資補充、大門恢復管制 → 72 小時內事後檢討</dd>
+        <dt>表單</dt><dd>站況日誌（結案欄）</dd>
+      </dl>
+    </div></li>
+  </ol>
+</section>
+
+<section id="triage">
+  <header><span class="eyebrow">分流</span><h2>到站分流與惡化觸發</h2><p class="note">v1 用了三套判斷（到站穩定與否、紀錄單異常值、途中 AVPU/GCS），v2 統一用 NEWS2，和醫院端語言一致。臥床本身不是分流依據，另以「臥床」標記安排床位。</p></header>
+  <div class="tbl"><table>
+    <thead><tr><th>顏色</th><th>判斷</th><th>安置</th><th>監測頻率</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip c-red">紅</span></td><td>NEWS2 ≥7；需氧氣、呼吸器、透析等維生設備；懷疑需手術（大出血、胸腹穿刺傷等）；煙霧吸入；燒傷</td><td>不收，立即 119 後送。第三階段：在健康中心短暫穩定、等候後送</td><td>持續</td></tr>
+      <tr><td><span class="chip c-amber">黃</span></td><td>NEWS2 1–6，或新發生意識混亂已排除急症</td><td>第二階段：健康中心病床區（滿床時改長照模擬教室觀察區）。第三階段：OSCE 教室</td><td class="mono">每 1 小時</td></tr>
+      <tr><td><span class="chip c-green">綠</span></td><td>NEWS2 0，生命徵象穩定</td><td>長照模擬教室；臥床者使用教學床</td><td class="mono">每 4 小時</td></tr>
+      <tr><td><span class="chip c-violet">1:1</span></td><td>失智、譫妄風險、能步行但定向差，可疊加在黃或綠</td><td>指派固定陪伴者，安排在失智友善區</td><td>持續陪伴</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="pcc">
+  <header><span class="eyebrow">延長照護</span><h2>PCC 十項核心能力：國北護做得到哪些</h2><p class="note">依美軍 Joint Trauma System 延長傷患照護指引的十項核心能力改寫，標出本站定位。護理照護、監測、後送準備是國北護的強項，也是 PCC 最常缺的部分；第三階段擴充的項目另外標註。</p></header>
+  <div class="tbl"><table>
+    <thead><tr><th>能力</th><th>本站</th><th>具體做法或界線</th></tr></thead>
+    <tbody>
+      <tr><td>監測</td><td><span class="chip c-green">核心</span></td><td>NEWS2 定時評估、站況板追蹤每床分數</td></tr>
+      <tr><td>護理照護</td><td><span class="chip c-green">核心</span></td><td>翻身、壓傷預防、水分、排泄、口腔、進食、以人為本照護原則</td></tr>
+      <tr><td>後送準備</td><td><span class="chip c-green">核心</span></td><td>個案卡隨時可帶走、用藥與隨身物品打包、SBAR 交接、大門與落客點動線</td></tr>
+      <tr><td>遠距醫療</td><td><span class="chip c-amber">第一階段建立</span></td><td>合作醫院或衛生局指定醫師的諮詢窗口與常規醫囑</td></tr>
+      <tr><td>身體評估</td><td><span class="chip c-amber">基本</span></td><td>護理師頭到腳評估、疼痛（NRS／PAINAD）、皮膚</td></tr>
+      <tr><td>復甦</td><td><span class="chip c-amber">基本</span></td><td>口服補液、BLS／AED；靜脈輸液需醫囑。第三階段加入 MARCH 止血</td></tr>
+      <tr><td>止痛鎮靜</td><td><span class="chip c-amber">有限</span></td><td>依原機構醫囑或常規醫囑的口服止痛；不做鎮靜</td></tr>
+      <tr><td>氣道</td><td><span class="chip c-gray">BLS</span></td><td>擺位、抽吸、口咽呼吸道；需進階氣道即後送</td></tr>
+      <tr><td>通氣與給氧</td><td><span class="chip c-gray">BLS</span></td><td>BVM 備用；需持續給氧者不收</td></tr>
+      <tr><td>外科處置</td><td><span class="chip c-red">不做</span></td><td>辨識需手術者後轉出。第三階段處理傷口與骨折固定；BORP 若部署到校園，學校只提供場地</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="partner">
+  <header><span class="eyebrow">機構端</span><h2>長照機構出發前檢核（寫入 MOU 乙方義務）</h2><p class="note">v1 的「疏散」「轉送」兩階段內容移到這裡，由機構執行。</p></header>
+  <ul class="check">
+    <li>已先撥 119，並排除紅色個案（需氧、生命徵象不穩、需手術、煙霧吸入、燒傷）</li>
+    <li>撥校安中心專線告知：人數、臥床／輪椅／步行各幾人、預計出發時間、回撥電話</li>
+    <li>依國北護回覆的校門與落客點前往</li>
+    <li>每位個案的隨身文件包：用藥清單（含最後給藥時間）、過敏、診斷、家屬電話、3 天份藥物</li>
+    <li>個人物品：眼鏡、助聽器、假牙、慣用輔具</li>
+    <li>隨行照護人員至少每 5 名住民 1 人，並留在站內</li>
+    <li>交通：臥床者用民間救護車或復康巴士（不占用 119），輪椅固定確認</li>
+    <li>最後確認機構內無人遺留</li>
+    <li>持續負責家屬通知，並接收國北護的站況回報</li>
+  </ul>
+</section>
+
+<section id="open">
+  <header><span class="eyebrow">待決</span><h2>需要學校決定的事</h2><p class="note">以下都屬第一階段工作，決定後寫入 SOP。</p></header>
+  <ul class="check open">
+    <li>遠距醫療與常規醫囑：與哪家合作醫院或衛生局指定醫師簽訂？</li>
+    <li>校級授權：急救站列入校園災害防救計畫的方式，以及站長的授權範圍</li>
+    <li>校安中心：能否擔任單一受理專線，並負責發送動員訊息</li>
+    <li>大門：開放哪個校門給救護車、落客點設在哪裡、夜間誰有開門權限</li>
+    <li>宿舍召回：舍監的召回流程、集合點、志工名冊由誰維護</li>
+    <li>保險：學生參與實際應變的保險類型與經費</li>
+    <li>是否向臺北市衛生局登記為急救站候選場址，並爭取參與 2027 城鎮韌性演習</li>
+    <li>電力：健康中心、長照模擬教室、OSCE 教室是否在備援電力迴路上，可撐幾小時</li>
+    <li>床位：教學床實際數量，確認臥床上限 12 床是否可行</li>
+    <li>護理學院 OSCE 教室：間數、床數、電源與監視設備，以及第三階段借用程序</li>
+    <li>震後場址安全：是否預先約定結構技師快速確認校園建物（參考舊金山 Building Occupancy Resumption Program 的預約制）</li>
+  </ul>
+</section>
+
+<section id="changes">
+  <header><span class="eyebrow">版本差異</span><h2>v1 到 v2 改了什麼</h2></header>
+  <div class="tbl"><table>
+    <thead><tr><th>項目</th><th>v1</th><th>v2</th><th>理由</th></tr></thead>
+    <tbody>
+      <tr><td>定位</td><td>長照機構疏散接收站</td><td>社區急救站候選場址＋延長照護，兩種模式</td><td>接上 2025–2026 韌性醫療與城鎮韌性演習體系</td></tr>
+      <tr><td>推進</td><td>一次到位</td><td>連結規劃 → 建置演練 → 擴大收治</td><td>先驗證長照住民收治，再擴大到一般傷患與 OSCE 教室</td></tr>
+      <tr><td>PCC</td><td>Person-Centered Care</td><td>Prolonged Casualty Care</td><td>與衛生局、外科及重症醫學會用語一致</td></tr>
+      <tr><td>階段</td><td>六階段</td><td>開站後四步</td><td>疏散、轉送屬機構與救護責任</td></tr>
+      <tr><td>組織</td><td>五組＋副指揮官，只有學院內部</td><td>四組＋副站長，納入校級應變體系與 14 項校內分工</td><td>大門、電力、宿舍、人事、教務都需要跨處室授權</td></tr>
+      <tr><td>通報</td><td>MOU 指定聯絡人</td><td>校安中心 24 小時單一專線</td><td>個人手機在夜間與假日不可靠</td></tr>
+      <tr><td>夜間人力</td><td>未說明</td><td>宿舍召回機制＋鄰近教職員名冊</td><td>夜間情境的 30 分鐘目標需要可執行的人力來源</td></tr>
+      <tr><td>惡化判斷</td><td>三套標準</td><td>NEWS2</td><td>一套標準好教、好交接</td></tr>
+      <tr><td>家屬通知</td><td>資深護生</td><td>機構負責</td><td>責任與個資回到照護主體</td></tr>
+      <tr><td>表單</td><td>F-01～F-07 共 7 張</td><td>個案卡、站況日誌、給藥紀錄 3 張</td><td>一人一卡，後送時整張帶走</td></tr>
+      <tr><td>腕帶</td><td>含血型</td><td>刪除血型</td><td>未驗證血型有輸血安全風險，且本站不輸血</td></tr>
+      <tr><td>臥床轉送</td><td>119 救護車</td><td>民間救護車／復康巴士</td><td>災時 119 優先處理緊急傷患</td></tr>
+      <tr><td>血糖</td><td>AC＋PC 一天 6 次</td><td>依原醫囑，未指示則 AC＋睡前</td><td>臨時安置不需過頻</td></tr>
+      <tr><td>醫療指導</td><td>未設</td><td>遠距醫師＋常規醫囑</td><td>站內用藥與處置需有醫囑來源</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+</main>
+
+<footer><div class="wrap" style="display:grid;gap:.5rem">
+  <span>國立臺北護理健康大學 USR 種子育成計畫「紮根校園，共築韌性」· v2 草案，取代 v1.0 的流程與表單；MOU 與物資清單沿用 v1，並依本頁修訂。</span>
+  <span>主要依據</span>
+  <ul>
+    <li><a href="https://today.line.me/tw/v3/article/3N5kkWv">衛福部首辦醫學中心 BORP 挑戰賽</a></li>
+    <li><a href="https://www.tsccm.org.tw/apply/ON_Files/N202639105215_538_001.pdf">台灣重症醫學會：Integration of PCC &amp; BORP（2026-04-11）</a></li>
+    <li><a href="https://www.tcnews.com.tw/medicine/item/30348.html">台北慈院 BORP 團隊投入 2026 新北城鎮韌性演習</a></li>
+    <li><a href="https://news.m.pchome.com.tw/living/focusnews/20260810/index-78636560139089302009.html">屏東縣 2026 城鎮韌性演習急救站</a></li>
+    <li>Royal College of Physicians, National Early Warning Score (NEWS) 2, 2017</li>
+    <li>Joint Trauma System, Prolonged Casualty Care Guidelines（十項核心能力）</li>
+  </ul>
+</div></footer>
+
+</body>
+</html>
